@@ -12,34 +12,41 @@ struct BridgeView: View {
 
     var body: some View {
         if let game = store.game {
+            GeometryReader { geometry in
+            let gridSide = geometry.size.width - 32  // its frame is drawn 4pt outside, so this lines up with the box below
             VStack(spacing: 0) {
-                HStack(alignment: .top, spacing: 8) {
-                    SectorGridView(game: game, highlights: highlights(game), bursts: store.bursts, shots: store.shots, onTap: { tapped($0, game: game) })
-                        .keyframeAnimator(initialValue: 0.0, trigger: store.hitPulse) { view, offset in
-                            view.offset(x: offset)
-                        } keyframes: { _ in
-                            KeyframeTrack {
-                                LinearKeyframe(-9, duration: 0.04)
-                                LinearKeyframe(8, duration: 0.05)
-                                LinearKeyframe(-6, duration: 0.05)
-                                LinearKeyframe(4, duration: 0.05)
-                                LinearKeyframe(0, duration: 0.06)
-                            }
+                SectorGridView(game: game, highlights: highlights(game), bursts: store.bursts, shots: store.shots, onTap: { tapped($0, game: game) })
+                    .keyframeAnimator(initialValue: 0.0, trigger: store.hitPulse) { view, offset in
+                        view.offset(x: offset)
+                    } keyframes: { _ in
+                        KeyframeTrack {
+                            LinearKeyframe(-9, duration: 0.04)
+                            LinearKeyframe(8, duration: 0.05)
+                            LinearKeyframe(-6, duration: 0.05)
+                            LinearKeyframe(4, duration: 0.05)
+                            LinearKeyframe(0, duration: 0.06)
                         }
-                        .overlay {
-                            if let scan = store.lastLongRangeScan {
-                                LongRangeOverlay(scan: scan) { store.dismissLongRangeScan() }
-                            }
+                    }
+                    .overlay {
+                        if let scan = store.lastLongRangeScan {
+                            LongRangeOverlay(scan: scan) { store.dismissLongRangeScan() }
                         }
+                    }
+                    .frame(width: gridSide, height: gridSide)
+                    .padding(.horizontal, 12)
+                    .padding(.top, 10)
+                    .padding(.bottom, 8)
+                HStack(alignment: .top, spacing: 0) {
+                    LogView(lines: store.log)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    Rectangle().frame(width: 1).foregroundStyle(Theme.dim)
                     ReadoutPanel(game: game, lexicon: store.lexicon)
-                        .frame(width: 138)
+                        .frame(width: 92)
+                        .padding(.horizontal, 6)
                 }
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal, 10)
-                .padding(.top, 10)
-                .padding(.bottom, 8)
-                LogView(lines: store.log)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .overlay(Rectangle().stroke(Theme.dim, lineWidth: 1))
+                .padding(.horizontal, 12)
                 panel(game)
                     .padding(12)
                     .animation(.easeOut(duration: 0.15), value: mode == .commands)
@@ -90,6 +97,7 @@ struct BridgeView: View {
             }
             .onChange(of: game.status.isOver) { _, over in
                 if over { mode = .commands }
+            }
             }
         }
     }

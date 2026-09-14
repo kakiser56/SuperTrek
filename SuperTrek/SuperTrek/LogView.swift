@@ -17,7 +17,7 @@ struct LogView: View {
                             .id(line.id)
                     }
                 }
-                .padding(.horizontal, 12)
+                .padding(.horizontal, 8)
                 .padding(.vertical, 6)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -28,8 +28,6 @@ struct LogView: View {
                 }
             }
         }
-        .overlay(Rectangle().frame(height: 1).foregroundStyle(Theme.dim), alignment: .top)
-        .overlay(Rectangle().frame(height: 1).foregroundStyle(Theme.dim), alignment: .bottom)
     }
 
     /// Colors the condition word in the scan's side panel.

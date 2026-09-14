@@ -8,6 +8,7 @@ struct ComputerView: View {
     let lexicon: Lexicon
     var onFunction: (ComputerFunction) -> Void
     var onPlot: (QuadrantPosition) -> Void
+    @State private var showRegions = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -18,18 +19,23 @@ struct ComputerView: View {
                     .font(Theme.mono(12, weight: .bold))
                     .foregroundStyle(Theme.dim)
             }
-            Text("GALACTIC RECORD  ·  TAP A QUADRANT TO PLOT A COURSE")
+            Text(showRegions ? "GALAXY REGION MAP" : "GALACTIC RECORD  ·  TAP A QUADRANT TO PLOT A COURSE")
                 .font(Theme.mono(10))
                 .foregroundStyle(Theme.dim)
-            chart
-            Text("ENEMIES · BASES · STARS      *** UNCHARTED")
-                .font(Theme.mono(9))
-                .foregroundStyle(Theme.dim)
+            if showRegions {
+                regionMap
+            } else {
+                chart
+                Text("ENEMIES · BASES · STARS      *** UNCHARTED")
+                    .font(Theme.mono(9))
+                    .foregroundStyle(Theme.dim)
+            }
             VStack(spacing: 8) {
                 row("1  STATUS REPORT", .statusReport)
                 row("2  \(lexicon.torpedo) DATA", .torpedoData)
                 row("3  STARBASE NAV DATA", .starbaseNavigationData)
-                row("5  GALAXY REGION MAP", .regionMap)
+                Button(showRegions ? "0  GALACTIC RECORD" : "5  GALAXY REGION MAP") { showRegions.toggle() }
+                    .buttonStyle(TerminalButtonStyle(tint: Theme.dim))
             }
             Spacer(minLength: 0)
             FeedbackToggles()
@@ -70,6 +76,32 @@ struct ComputerView: View {
                         .buttonStyle(.plain)
                         .accessibilityLabel("Quadrant \(row) \(col)")
                         .accessibilityIdentifier("chart.\(row).\(col)")
+                    }
+                }
+            }
+        }
+    }
+
+    /// The 8x2 table of region names, with the current quadrant's row lit.
+    private var regionMap: some View {
+        Grid(horizontalSpacing: 12, verticalSpacing: 3) {
+            GridRow {
+                Text("").frame(width: 14)
+                Text("1 - 4").font(Theme.mono(9)).foregroundStyle(Theme.dim).frame(maxWidth: .infinity, alignment: .leading)
+                Text("5 - 8").font(Theme.mono(9)).foregroundStyle(Theme.dim).frame(maxWidth: .infinity, alignment: .leading)
+            }
+            ForEach(1...Game.gridSize, id: \.self) { row in
+                GridRow {
+                    Text("\(row)").font(Theme.mono(9)).foregroundStyle(Theme.dim).frame(width: 14)
+                    ForEach([false, true], id: \.self) { right in
+                        let isHere = row == game.quadrant.row && (game.quadrant.col > 4) == right
+                        Text(Regions.regionName(row: row, rightHalf: right))
+                            .font(Theme.mono(11, weight: isHere ? .bold : .regular))
+                            .foregroundStyle(isHere ? Theme.phosphor : Theme.phosphor.opacity(0.8))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .frame(height: 30)
+                            .padding(.horizontal, 6)
+                            .background(Theme.phosphor.opacity(isHere ? 0.2 : 0.06))
                     }
                 }
             }

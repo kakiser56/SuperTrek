@@ -2,21 +2,51 @@ import Foundation
 
 /// Turns events into the lines a 1978 teletype would have printed.
 public struct Narrator: Sendable {
-    /// The widest line the narrator produces. Matches the scan readout.
-    public static let columns = 57
+    /// The teletype's natural width. The scan readout is exactly this wide.
+    public static let teletypeColumns = 57
 
     public var lexicon: Lexicon
+    /// Prose longer than this is word-wrapped with a two-space hanging indent.
+    public var columns: Int
 
-    public init(lexicon: Lexicon = .standard) {
+    public init(lexicon: Lexicon = .standard, columns: Int = Narrator.teletypeColumns) {
         self.lexicon = lexicon
+        self.columns = columns
     }
 
     public func lines(for events: [Event]) -> [String] {
         events.flatMap(lines(for:))
     }
 
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     public func lines(for event: Event) -> [String] {
+        rawLines(for: event).flatMap(wrap)
+    }
+
+    /// Greedy word wrap that keeps a line's leading indent and indents
+    /// continuation lines two spaces further.
+    func wrap(_ line: String) -> [String] {
+        guard line.count > columns else { return [line] }
+        let lead = line.prefix { $0 == " " }.count
+        let words = line.split(separator: " ", omittingEmptySubsequences: true).map(String.init)
+        var out: [String] = []
+        var current = String(repeating: " ", count: lead)
+        var currentHasWord = false
+        for word in words {
+            let candidate = currentHasWord ? current + " " + word : current + word
+            if candidate.count <= columns || !currentHasWord {
+                current = candidate
+                currentHasWord = true
+            } else {
+                out.append(current)
+                current = String(repeating: " ", count: lead + 2) + word
+            }
+        }
+        out.append(current)
+        return out
+    }
+
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    func rawLines(for event: Event) -> [String] {
         let L = lexicon
         switch event {
         case let .missionBriefing(enemies, deadline, days, starbases):
@@ -33,7 +63,7 @@ public struct Narrator: Sendable {
                 "   \(L.enemyGlyph) \(L.name(of: .cruiser))     \(L.warbirdGlyph) \(L.name(of: .warbird))",
             ]
         case let .missionBegins(name):
-            return ["YOUR MISSION BEGINS WITH YOUR STARSHIP LOCATED", "IN THE GALACTIC QUADRANT, '\(name)'."]
+            return ["YOUR MISSION BEGINS WITH YOUR STARSHIP LOCATED IN THE GALACTIC QUADRANT, '\(name)'."]
         case let .enteringQuadrant(name):
             return ["NOW ENTERING \(name) QUADRANT . . ."]
         case .combatAreaConditionRed:
@@ -99,7 +129,7 @@ public struct Narrator: Sendable {
         case .starbaseShieldsProtect:
             return ["STARBASE SHIELDS PROTECT THE \(L.shipName)"]
         case let .hitOnShip(units, from, kind, remaining):
-            return ["\(units) UNIT HIT ON \(L.shipName) FROM \(L.name(of: kind))", "  AT SECTOR \(from.row) , \(from.col)   <SHIELDS DOWN TO \(remaining) UNITS>"]
+            return ["\(units) UNIT HIT ON \(L.shipName) FROM \(L.name(of: kind)) AT SECTOR \(from.row) , \(from.col)", "  <SHIELDS DOWN TO \(remaining) UNITS>"]
         case let .deviceDamagedByHit(device):
             return ["DAMAGE CONTROL REPORTS", "  '\(L.name(of: device)) DAMAGED BY THE HIT'"]
         case .shipDestroyed:
@@ -127,7 +157,7 @@ public struct Narrator: Sendable {
         case .torpedoTubesInoperable:
             return ["\(L.torpedo) TUBES ARE NOT OPERATIONAL"]
         case let .torpedoTrack(track):
-            return ["\(L.torpedo) TRACK:"] + track.map { "               \($0.row) , \($0.col)" }
+            return ["\(L.torpedo) TRACK:"] + track.map { "        \($0.row) , \($0.col)" }
         case .torpedoMissed:
             return ["\(L.torpedo) MISSED"]
         case let .starAbsorbedTorpedo(at):

@@ -52,7 +52,8 @@ final class GameStore {
     private(set) var explosionPulse = 0
     private(set) var refusalPulse = 0
     private let sounds = SoundBank()
-    let narrator = Narrator()
+    /// Wrapped for the log column beside the readout.
+    let narrator = Narrator(columns: 40)
     let lexicon = Lexicon.standard
 
     private var nextLineID = 0

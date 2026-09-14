@@ -31,16 +31,46 @@ struct LineWidthTests {
         ]
     }()
 
-    @Test("No narrated line is wider than the phone's teletype")
+    @Test("No narrated line is wider than the teletype")
     func width() {
         let narrator = Narrator()
         var offenders: [String] = []
         for event in Self.samples {
-            for line in narrator.lines(for: event) where line.count > Narrator.columns {
+            for line in narrator.lines(for: event) where line.count > narrator.columns {
                 offenders.append("\(line.count): \(line)")
             }
         }
         let report = offenders.joined(separator: "\n")
         #expect(offenders.isEmpty, "\(report)")
+    }
+
+    /// Events whose lines are tables or art; the app shows those in views instead.
+    static let art: [Event] = Self.samples.filter {
+        switch $0 {
+        case .shortRangeScan, .longRangeScan, .galacticRecord, .regionMap, .damageReport: true
+        default: false
+        }
+    }
+
+    @Test("Prose wraps cleanly at 40 columns for the phone")
+    func narrowWidth() {
+        let narrator = Narrator(columns: 40)
+        var offenders: [String] = []
+        for event in Self.samples where !Self.art.contains(event) {
+            for line in narrator.lines(for: event) where line.count > 40 {
+                offenders.append("\(line.count): \(line)")
+            }
+        }
+        let report = offenders.joined(separator: "\n")
+        #expect(offenders.isEmpty, "\(report)")
+    }
+
+    @Test("Wrapping keeps indent and never splits a word")
+    func wrapMechanics() {
+        let narrator = Narrator(columns: 20)
+        let lines = narrator.wrap("  THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG")
+        #expect(lines == ["  THE QUICK BROWN", "    FOX JUMPS OVER", "    THE LAZY DOG"])
+        #expect(narrator.wrap("SHORT") == ["SHORT"])
+        #expect(narrator.wrap("SUPERCALIFRAGILISTICEXPIALIDOCIOUS X") == ["SUPERCALIFRAGILISTICEXPIALIDOCIOUS", "  X"])
     }
 }
