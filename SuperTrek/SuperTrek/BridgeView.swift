@@ -5,7 +5,7 @@ import TrekEngine
 struct BridgeView: View {
     @Environment(GameStore.self) private var store
     @State private var mode: PanelMode = BridgeView.initialMode
-    @State private var showComputer = false
+    @State private var showComputer = ["computer", "help"].contains(UserDefaults.standard.string(forKey: "autoPanel") ?? "")
     @State private var confirmResign = false
     @State private var flashOpacity = 0.0
     @AppStorage(FeedbackSettings.hapticsKey) private var hapticsEnabled = true
@@ -71,7 +71,7 @@ struct BridgeView: View {
                 hapticsEnabled ? .error : nil
             }
             .sheet(isPresented: $showComputer) {
-                ComputerView(game: game, lexicon: store.lexicon) { function in
+                ComputerView(game: game, lexicon: store.lexicon, startOnHelp: UserDefaults.standard.string(forKey: "autoPanel") == "help") { function in
                     store.send(.computer(function))
                 } onPlot: { quadrant in
                     if let plot = game.plotCourse(toQuadrant: quadrant) {

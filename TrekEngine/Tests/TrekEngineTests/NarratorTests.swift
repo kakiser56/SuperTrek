@@ -40,14 +40,9 @@ struct NarratorTests {
 
 @Suite("Briefing legend")
 struct BriefingLegendTests {
-    @Test("The orders explain the sensor glyphs")
+    @Test("The orders point at the help function")
     func legend() {
         let lines = Narrator().lines(for: .missionBriefing(enemies: 5, deadline: 3030, days: 30, starbases: 2))
-        let text = lines.joined(separator: "\n")
-        #expect(text.contains("<*> YOUR SHIP"))
-        #expect(text.contains(">!< STARBASE"))
-        #expect(text.contains("+K+ INVADER BATTLE CRUISER"))
-        #expect(text.contains("+R+ INVADER WARBIRD"))
-        #expect(text.contains("*  STAR"))
+        #expect(lines.last == "SENSOR LEGEND AND STANDING ORDERS: COM 6, HELP.")
     }
 }

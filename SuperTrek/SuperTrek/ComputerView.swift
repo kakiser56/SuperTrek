@@ -6,19 +6,30 @@ struct ComputerView: View {
     @Environment(\.dismiss) private var dismiss
     let game: Game
     let lexicon: Lexicon
+    var startOnHelp = false
     var onFunction: (ComputerFunction) -> Void
     var onPlot: (QuadrantPosition) -> Void
     @State private var showRegions = false
+    @State private var showHelp = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
-                Text("LIBRARY-COMPUTER").font(Theme.mono(15, weight: .bold))
+                Text(showHelp ? "LIBRARY-COMPUTER · HELP" : "LIBRARY-COMPUTER").font(Theme.mono(15, weight: .bold))
                 Spacer()
+                if showHelp {
+                    Button("BACK") { showHelp = false }
+                        .font(Theme.mono(12, weight: .bold))
+                        .foregroundStyle(Theme.dim)
+                        .accessibilityIdentifier("help.back")
+                }
                 Button("CLOSE") { dismiss() }
                     .font(Theme.mono(12, weight: .bold))
                     .foregroundStyle(Theme.dim)
             }
+            if showHelp {
+                HelpView(lexicon: lexicon)
+            } else {
             Text(showRegions ? "GALAXY REGION MAP" : "GALACTIC RECORD  ·  TAP A QUADRANT TO PLOT A COURSE")
                 .font(Theme.mono(10))
                 .foregroundStyle(Theme.dim)
@@ -36,14 +47,19 @@ struct ComputerView: View {
                 row("3  STARBASE NAV DATA", .starbaseNavigationData)
                 Button(showRegions ? "0  GALACTIC RECORD" : "5  GALAXY REGION MAP") { showRegions.toggle() }
                     .buttonStyle(TerminalButtonStyle(tint: Theme.dim))
+                Button("6  HELP") { showHelp = true }
+                    .buttonStyle(TerminalButtonStyle(tint: Theme.dim))
+                    .accessibilityIdentifier("computer.help")
             }
             Spacer(minLength: 0)
             FeedbackToggles()
+            }
         }
         .padding(16)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .foregroundStyle(Theme.phosphor)
         .background(Theme.background)
+        .onAppear { if startOnHelp { showHelp = true } }
     }
 
     private var chart: some View {

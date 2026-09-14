@@ -53,7 +53,7 @@ final class GameStore {
     private(set) var refusalPulse = 0
     private let sounds = SoundBank()
     /// Wrapped for the log column beside the readout.
-    let narrator = Narrator(columns: 40)
+    let narrator = Narrator(columns: 38)
     let lexicon = Lexicon.standard
 
     private var nextLineID = 0

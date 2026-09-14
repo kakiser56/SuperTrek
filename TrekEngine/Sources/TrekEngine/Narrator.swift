@@ -50,17 +50,15 @@ public struct Narrator: Sendable {
         let L = lexicon
         switch event {
         case let .missionBriefing(enemies, deadline, days, starbases):
+            let bases = "\(starbases) STARBASE\(starbases == 1 ? "" : "S")"
             return [
                 "YOUR ORDERS ARE AS FOLLOWS:",
-                "     DESTROY THE \(enemies) \(L.enemyName) WARSHIPS WHICH HAVE INVADED",
-                "   THE GALAXY BEFORE THEY CAN ATTACK \(L.alliance)",
-                "   HEADQUARTERS ON STARDATE \(num(deadline)).  THIS GIVES YOU",
-                "   \(num(days)) DAYS.  THERE \(starbases == 1 ? "IS" : "ARE") \(starbases) STARBASE\(starbases == 1 ? "" : "S") IN THE GALAXY",
-                "   FOR RESUPPLYING YOUR SHIP.",
+                "  DESTROY THE \(enemies) \(L.enemyName) WARSHIPS WHICH HAVE INVADED THE GALAXY"
+                    + " BEFORE THEY CAN ATTACK \(L.alliance) HEADQUARTERS ON STARDATE \(num(deadline))."
+                    + "  THIS GIVES YOU \(num(days)) DAYS.  THERE \(starbases == 1 ? "IS" : "ARE") \(bases)"
+                    + " IN THE GALAXY FOR RESUPPLYING YOUR SHIP.",
                 "",
-                "SENSOR LEGEND:",
-                "   \(L.shipGlyph) YOUR SHIP     \(L.starbaseGlyph) STARBASE     \(L.starGlyph.trimmingCharacters(in: .whitespaces))  STAR",
-                "   \(L.enemyGlyph) \(L.name(of: .cruiser))     \(L.warbirdGlyph) \(L.name(of: .warbird))",
+                "SENSOR LEGEND AND STANDING ORDERS: COM 6, HELP.",
             ]
         case let .missionBegins(name):
             return ["YOUR MISSION BEGINS WITH YOUR STARSHIP LOCATED IN THE GALACTIC QUADRANT, '\(name)'."]

@@ -84,6 +84,17 @@ final class SuperTrekUITests: XCTestCase {
         XCTAssertTrue(logContains(app, "NOW ENTERING REGULUS III QUADRANT"))
     }
 
+    func testComputerHelpOpens() {
+        let app = launch()
+        app.buttons["command.COM"].tap()
+        XCTAssertTrue(app.buttons["computer.help"].waitForExistence(timeout: 3))
+        app.buttons["computer.help"].tap()
+        XCTAssertTrue(app.staticTexts["SENSOR LEGEND"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.staticTexts["STRATEGY"].exists || app.staticTexts["COMMANDS"].exists)
+        app.buttons["help.back"].tap()
+        XCTAssertTrue(app.buttons["computer.help"].waitForExistence(timeout: 3))
+    }
+
     func testCancelReturnsToCommands() {
         let app = launch()
         app.buttons["command.TOR"].tap()

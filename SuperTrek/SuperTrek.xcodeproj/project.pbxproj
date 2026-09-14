@@ -17,6 +17,7 @@
 		55A6B022526AAEEFBB51188B /* CommandBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F856B0D890842E8C84B383 /* CommandBar.swift */; };
 		571692AE7D7C78223B4F6B7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CAA256C1F7DD41F42670251 /* Assets.xcassets */; };
 		5CA6B222039C2C1F7AC194AC /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8AA7C1D4261286799B542D1 /* LogView.swift */; };
+		780F0CF3458EC25155B092B0 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE9C6C32C49B54986591E81 /* HelpView.swift */; };
 		8F1BB085780A93C981909692 /* SuperTrekApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B7BD966622BE8FC0BAD29C /* SuperTrekApp.swift */; };
 		A63E7974DE2508D6D890A62B /* FireLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F036C9403141AD38275AFA /* FireLinesView.swift */; };
 		AEF945EA99CD7D208DEA7ACB /* NewGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D31A2038867AD191227A4A /* NewGameView.swift */; };
@@ -58,9 +59,10 @@
 		A1F036C9403141AD38275AFA /* FireLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireLinesView.swift; sourceTree = "<group>"; };
 		A8AA7C1D4261286799B542D1 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		B9F856B0D890842E8C84B383 /* CommandBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandBar.swift; sourceTree = "<group>"; };
+		BEE9C6C32C49B54986591E81 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		C48DD7295C9D24933ACB8953 /* SuperTrekUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperTrekUITests.swift; sourceTree = "<group>"; };
 		C58A1450DC0897DE52331373 /* SuperTrekUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SuperTrekUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC5B897BEE7CB0E1F01E3577 /* SuperTrek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuperTrek.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC5B897BEE7CB0E1F01E3577 /* SuperTrek.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SuperTrek.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1236E404F8A96F690BCFCDB /* BridgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeView.swift; sourceTree = "<group>"; };
 		FE9A4C7DF2B6BE23E5EB2F51 /* GameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -99,6 +101,7 @@
 				538FC54BC955177F868E2BA7 /* Effects.swift */,
 				A1F036C9403141AD38275AFA /* FireLinesView.swift */,
 				FE9A4C7DF2B6BE23E5EB2F51 /* GameStore.swift */,
+				BEE9C6C32C49B54986591E81 /* HelpView.swift */,
 				83498748607740A6320656ED /* Info.plist */,
 				A8AA7C1D4261286799B542D1 /* LogView.swift */,
 				9A55BA64242763B5600503DA /* LongRangeOverlay.swift */,
@@ -194,6 +197,7 @@
 						TestTargetID = 6BDECA001739EA9EFDBFFA0C;
 					};
 					6BDECA001739EA9EFDBFFA0C = {
+						DevelopmentTeam = QE3GSQ7TYQ;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -253,6 +257,7 @@
 				F4FEFC35CFCB59C4B08B9ADB /* Effects.swift in Sources */,
 				A63E7974DE2508D6D890A62B /* FireLinesView.swift in Sources */,
 				32354428D69F217F37C2233E /* GameStore.swift in Sources */,
+				780F0CF3458EC25155B092B0 /* HelpView.swift in Sources */,
 				5CA6B222039C2C1F7AC194AC /* LogView.swift in Sources */,
 				17658237DB7D13D1B7A3BD90 /* LongRangeOverlay.swift in Sources */,
 				AEF945EA99CD7D208DEA7ACB /* NewGameView.swift in Sources */,
@@ -423,7 +428,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ASH9E9QJDK;
+				DEVELOPMENT_TEAM = QE3GSQ7TYQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SuperTrek/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Super Trek";
@@ -450,7 +455,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ASH9E9QJDK;
+				DEVELOPMENT_TEAM = QE3GSQ7TYQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SuperTrek/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Super Trek";
