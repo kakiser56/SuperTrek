@@ -19,6 +19,7 @@ struct HelpView: View {
                     para("The galaxy is 8 by 8 quadrants. Each quadrant is 8 by 8 sectors. Invader warships have entered the galaxy, and you must destroy every one of them before the deadline in stardates shown in your orders.")
                     para("Warbirds carry weaker shields than battle cruisers but hit harder. In a crowded quadrant, take them out first.")
                     para("Docking next to a starbase refills energy and torpedoes and drops your shields. A damage report while docked offers to repair everything at once for a little time.")
+                    para("A new mission asks two questions, as BSD trek did. Length sets how many invaders you face and how much time you get. Skill sets how strong they are. Medium and good is the 1978 game exactly. Harder settings multiply your efficiency rating.")
                 }
                 section("COMMANDS") {
                     command("NAV", "Warp along a course. Tap a sector to plot to it, or tap a quadrant on the computer's chart.")
@@ -45,6 +46,17 @@ struct HelpView: View {
                     tip("Cross the galaxy in one jump. Time, not distance, is the scarce resource.")
                     tip("Go home when you are hurt. A starbase repairs everything, and starbase shields protect a docked ship.")
                     tip("Never fire a torpedo through a starbase. Fleet command remembers.")
+                }
+                section("WHERE THIS CAME FROM") {
+                    para("Super Trek is a port of the 1978 BASIC listing of Super Star Trek, one of the oldest computer games still played. The rules, formulas, and messages follow that listing. Only the names have changed.")
+                    history("1971", "Mike Mayfield writes the original Star Trek game in BASIC on an SDS Sigma 7 timesharing system, then rewrites it for HP BASIC, which spreads it through HP's program library.")
+                    history("1973", "David Ahl publishes it in DEC's \"101 BASIC Computer Games\", the book that carried the game to a generation of minicomputer users.")
+                    history("1974", "Bob Leedom expands it into Super Star Trek: the library computer, damage control, the galactic record, and more. His header solicits \"comments, epithets, and suggestions.\"")
+                    history("1975", "Eric Allman writes an independent version, trek, in C at Berkeley. It ships with BSD UNIX and is the one that asks for a game length and a skill level.")
+                    history("1978", "John Borders converts Leedom's version to Microsoft 8K BASIC. Ahl publishes it in \"BASIC Computer Games, Microcomputer Edition\". This is the listing Super Trek follows.")
+                    history("1996", "Chris Nystrom ports the BASIC to C. Alan Cox reworks that port for the Fuzix operating system in 2018, fixing bugs that crept in over four decades of retyping.")
+                    history("2026", "Super Trek brings the 1978 rules to the iPhone with touch controls, sound, and a save after every command.")
+                    para("The original program was placed in the public domain by its authors and has been freely copied, retyped, and ported ever since. UNIX is a registered trademark of The Open Group. Super Trek is an independent work and is not affiliated with or endorsed by any television or film franchise.")
                 }
             }
             .padding(.bottom, 24)
@@ -76,6 +88,13 @@ struct HelpView: View {
 
     private func para(_ text: String) -> some View {
         Text(text).font(Theme.mono(11)).foregroundStyle(Theme.phosphor.opacity(0.85))
+    }
+
+    private func history(_ year: String, _ text: String) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Text(year).font(Theme.mono(11, weight: .bold)).frame(width: 34, alignment: .leading)
+            Text(text).font(Theme.mono(11)).foregroundStyle(Theme.phosphor.opacity(0.85))
+        }
     }
 
     private func tip(_ text: String) -> some View {

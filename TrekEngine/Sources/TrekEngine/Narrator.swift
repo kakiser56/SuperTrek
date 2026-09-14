@@ -60,6 +60,8 @@ public struct Narrator: Sendable {
                 "",
                 "SENSOR LEGEND AND STANDING ORDERS: COM 6, HELP.",
             ]
+        case let .missionProfile(length, skill):
+            return ["THIS IS A \(length.rawValue.uppercased()) GAME AT \(skill.rawValue.uppercased()) SKILL."]
         case let .missionBegins(name):
             return ["YOUR MISSION BEGINS WITH YOUR STARSHIP LOCATED IN THE GALACTIC QUADRANT, '\(name)'."]
         case let .enteringQuadrant(name):

@@ -27,6 +27,7 @@
 		D99B9105EC95DACC32CB45FB /* Sounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF92F5036DDF5878EBA0410 /* Sounds.swift */; };
 		DB52942C1BF7A290ABB8816B /* TrekEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 398EF5372B0814FAA8BD2165 /* TrekEngine */; };
 		F4FEFC35CFCB59C4B08B9ADB /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538FC54BC955177F868E2BA7 /* Effects.swift */; };
+		FCB218ECC546DEF558FB7C8D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D09910C3686687E4B07A3CC3 /* PrivacyInfo.xcprivacy */; };
 		FEA6C524D9417EB8D4ABD620 /* ComputerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1A4D5DF545AA855DD3CC3 /* ComputerView.swift */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,7 @@
 		BEE9C6C32C49B54986591E81 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		C48DD7295C9D24933ACB8953 /* SuperTrekUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperTrekUITests.swift; sourceTree = "<group>"; };
 		C58A1450DC0897DE52331373 /* SuperTrekUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SuperTrekUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D09910C3686687E4B07A3CC3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DC5B897BEE7CB0E1F01E3577 /* SuperTrek.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SuperTrek.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1236E404F8A96F690BCFCDB /* BridgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeView.swift; sourceTree = "<group>"; };
 		FE9A4C7DF2B6BE23E5EB2F51 /* GameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStore.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				A8AA7C1D4261286799B542D1 /* LogView.swift */,
 				9A55BA64242763B5600503DA /* LongRangeOverlay.swift */,
 				35D31A2038867AD191227A4A /* NewGameView.swift */,
+				D09910C3686687E4B07A3CC3 /* PrivacyInfo.xcprivacy */,
 				78316A12BBB6D266BEA97241 /* ReadoutPanel.swift */,
 				9EA24AD970573B544F3B9998 /* SectorGridView.swift */,
 				5DF92F5036DDF5878EBA0410 /* Sounds.swift */,
@@ -231,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				571692AE7D7C78223B4F6B7F /* Assets.xcassets in Resources */,
+				FCB218ECC546DEF558FB7C8D /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,7 +442,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiserapps.supertrek;
 				SDKROOT = iphoneos;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -465,7 +469,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiserapps.supertrek;
 				SDKROOT = iphoneos;
 				SWIFT_STRICT_CONCURRENCY = complete;

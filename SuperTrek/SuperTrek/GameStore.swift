@@ -73,6 +73,10 @@ final class GameStore {
     init(saveURL: URL? = nil) {
         let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         self.saveURL = saveURL ?? documents.appendingPathComponent("supertrek-save.json")
+        // `-resetSave YES` on launch discards any saved game (UI tests).
+        if UserDefaults.standard.bool(forKey: "resetSave") {
+            try? FileManager.default.removeItem(at: self.saveURL)
+        }
         load()
         // `-autoFixture battle` on launch loads a hand-built quadrant (screenshots, UI tests).
         if let name = UserDefaults.standard.string(forKey: "autoFixture"), let fixture = Self.fixture(named: name) {
@@ -131,9 +135,9 @@ final class GameStore {
 
     // MARK: Play
 
-    func newGame(seed: UInt64? = nil) {
+    func newGame(seed: UInt64? = nil, profile: MissionProfile = .classic) {
         let seed = seed ?? UInt64.random(in: 1...UInt64(UInt32.max))
-        let (game, events) = Game.start(seed: seed)
+        let (game, events) = Game.start(seed: seed, profile: profile)
         self.game = game
         log = []
         nextLineID = 0

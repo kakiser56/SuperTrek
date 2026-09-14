@@ -95,6 +95,17 @@ final class SuperTrekUITests: XCTestCase {
         XCTAssertTrue(app.buttons["computer.help"].waitForExistence(timeout: 3))
     }
 
+    func testNewMissionChoosesLengthAndSkill() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-resetSave", "YES"]
+        app.launch()
+        XCTAssertTrue(app.buttons["length.long"].waitForExistence(timeout: 3))
+        app.buttons["length.long"].tap()
+        app.buttons["skill.expert"].tap()
+        app.buttons["newgame.begin"].tap()
+        XCTAssertTrue(logContains(app, "THIS IS A LONG GAME AT EXPERT SKILL."))
+    }
+
     func testCancelReturnsToCommands() {
         let app = launch()
         app.buttons["command.TOR"].tap()

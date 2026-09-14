@@ -270,7 +270,7 @@ struct GameOverView: View {
     private var detail: String {
         switch game.status {
         case let .won(efficiency):
-            "EFFICIENCY RATING \(String(format: "%.2f", efficiency))"
+            "EFFICIENCY RATING \(String(format: "%.2f", efficiency))\n\(game.profile.length.rawValue.uppercased()) GAME · \(game.profile.skill.rawValue.uppercased()) SKILL"
         default:
             "\(game.enemiesRemaining) \(store.lexicon.enemyPlural) LEFT AT STARDATE \(String(format: "%.1f", game.stardate))"
         }

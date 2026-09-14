@@ -47,6 +47,8 @@ struct TerminalButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(Theme.mono(15, weight: .bold))
+            .lineLimit(1)
+            .minimumScaleFactor(0.6)
             .foregroundStyle(configuration.isPressed ? Theme.background : tint)
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity)

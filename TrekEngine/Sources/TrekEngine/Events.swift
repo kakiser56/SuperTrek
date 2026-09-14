@@ -27,6 +27,7 @@ public struct EnemyTargetData: Hashable, Codable, Sendable {
 public enum Event: Hashable, Codable, Sendable {
     // Opening
     case missionBriefing(enemies: Int, deadline: Double, days: Double, starbases: Int)
+    case missionProfile(length: MissionLength, skill: Skill)
     case missionBegins(quadrantName: String)
     case enteringQuadrant(quadrantName: String)
     case combatAreaConditionRed

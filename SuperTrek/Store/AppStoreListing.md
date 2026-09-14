@@ -34,6 +34,9 @@ Green phosphor on black. The eight-line readout beside the sector grid. A scroll
 TWO KINDS OF INVADER
 Battle cruisers, marked +K+, are the classic enemy. Warbirds, marked +R+, carry weaker shields but hit harder. Every quadrant deals a mix.
 
+YOUR GAME, YOUR PACE
+Before each mission, choose a length and a skill, the two questions BSD trek asked. Medium and good is the 1978 game exactly. Harder settings mean more invaders, stronger shields, and a bigger efficiency rating when you win.
+
 REPLAYABLE
 Every galaxy comes from a seed. Enter a seed to replay a mission or to share one with a friend. Finish the mission and the game rates your efficiency, just as the original did.
 

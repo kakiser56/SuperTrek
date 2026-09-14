@@ -19,6 +19,7 @@ extension Game {
 
     public init(fixture: Fixture) {
         seed = fixture.seed
+        profile = .classic
         rng = SeededRandom(seed: fixture.seed)
         quadrant = fixture.quadrant
         sector = fixture.sector

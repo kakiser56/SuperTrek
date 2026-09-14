@@ -27,6 +27,7 @@ public struct Game: Hashable, Codable, Sendable {
     public static let damagedWarpLimit = 0.2
 
     public let seed: UInt64
+    public let profile: MissionProfile
     var rng: SeededRandom
 
     public internal(set) var galaxy: Galaxy
@@ -71,8 +72,8 @@ public struct Game: Hashable, Codable, Sendable {
 
     /// Generates a new galaxy from the seed and returns the opening events:
     /// the briefing, the first quadrant, and the first scan.
-    public static func start(seed: UInt64) -> (game: Game, events: [Event]) {
-        var game = Game(seed: seed)
+    public static func start(seed: UInt64, profile: MissionProfile = .classic) -> (game: Game, events: [Event]) {
+        var game = Game(seed: seed, profile: profile)
         var events: [Event] = [
             .missionBriefing(
                 enemies: game.enemiesRemaining,
@@ -81,19 +82,23 @@ public struct Game: Hashable, Codable, Sendable {
                 starbases: game.starbasesRemaining
             ),
         ]
+        if profile != .classic {
+            events.append(.missionProfile(length: profile.length, skill: profile.skill))
+        }
         events += game.enterQuadrant(firstEntry: true)
         return (game, events)
     }
 
     /// Lines 810 to 1200 of the listing.
-    private init(seed: UInt64) {
+    private init(seed: UInt64, profile: MissionProfile) {
         self.seed = seed
+        self.profile = profile
         var rng = SeededRandom(seed: seed)
 
         let stardate = Double(Int(rng.unit() * 20 + 20)) * 100
         self.stardate = stardate
         self.startingStardate = stardate
-        self.missionDuration = Double(25 + Int(rng.unit() * 10))
+        self.missionDuration = (Double(25 + Int(rng.unit() * 10)) * profile.length.timeScale).rounded()
         self.ship = Ship()
         self.status = .playing
         self.condition = .green
@@ -106,14 +111,16 @@ public struct Game: Hashable, Codable, Sendable {
         var summaries: [QuadrantSummary] = []
         var totalEnemies = 0
         var totalBases = 0
+        // Thresholds are the listing's .98/.95/.80, stretched by game length.
+        let density = profile.length.enemyDensity
         for _ in 0..<(Game.gridSize * Game.gridSize) {
             let roll = rng.unit()
             let enemies: Int
-            if roll > 0.98 {
+            if roll > 1 - 0.02 * density {
                 enemies = 3
-            } else if roll > 0.95 {
+            } else if roll > 1 - 0.05 * density {
                 enemies = 2
-            } else if roll > 0.80 {
+            } else if roll > 1 - 0.20 * density {
                 enemies = 1
             } else {
                 enemies = 0
@@ -221,7 +228,8 @@ public struct Game: Hashable, Codable, Sendable {
             let p = map.randomEmptySector(using: &rng)
             map[p] = .enemy
             let kind: EnemyKind = rng.unit() < 0.5 ? .cruiser : .warbird
-            enemies.append(Enemy(position: p, energy: kind.initialEnergy(roll: rng.unit()), kind: kind))
+            let energy = kind.initialEnergy(roll: rng.unit()) * profile.skill.enemyStrength
+            enemies.append(Enemy(position: p, energy: energy, kind: kind))
         }
         for _ in 0..<summary.starbases {
             let p = map.randomEmptySector(using: &rng)
@@ -293,7 +301,7 @@ public struct Game: Hashable, Codable, Sendable {
     /// Line 6370: the efficiency rating is 1000 * (K7 / elapsed)^2.
     mutating func declareVictory() -> [Event] {
         let elapsed = max(stardate - startingStardate, 0.1)
-        let rating = 1000 * pow(Double(initialEnemyCount) / elapsed, 2)
+        let rating = 1000 * pow(Double(initialEnemyCount) / elapsed, 2) * profile.scoreMultiplier
         status = .won(efficiency: rating)
         return [.victory(stardate: stardate, efficiency: rating)]
     }
