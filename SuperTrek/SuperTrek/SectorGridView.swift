@@ -27,6 +27,7 @@ struct SectorGridView: View {
     var highlights: [SectorPosition: SectorHighlight] = [:]
     var bursts: [Burst] = []
     var shots: [Shot] = []
+    var ghosts: [Ghost] = []
     var onTap: (SectorPosition) -> Void
 
     private let labelWidth: CGFloat = 14
@@ -48,11 +49,12 @@ struct SectorGridView: View {
                         Text("\(row)").font(Theme.mono(10)).foregroundStyle(Theme.dim).frame(width: labelWidth)
                         ForEach(1...Game.gridSize, id: \.self) { col in
                             let position = SectorPosition(row: row, col: col)
-                            let content: SectorContent? = sensorsOut && game.map[position] != .ship ? nil : game.map[position]
+                            let ghost = ghosts.first { $0.position == position }
+                            let content: SectorContent? = sensorsOut && game.map[position] != .ship ? nil : (ghost?.content ?? game.map[position])
                             Button {
                                 onTap(position)
                             } label: {
-                                let kind = content == .enemy ? game.enemy(at: position)?.kind : nil
+                                let kind = content == .enemy ? (ghost?.kind ?? game.enemy(at: position)?.kind) : nil
                                 Text(sensorsOut && content == nil ? "?" : glyph(for: content, kind: kind))
                                     .font(Theme.mono(13, weight: content == .ship ? .bold : .regular))
                                     .lineLimit(1)

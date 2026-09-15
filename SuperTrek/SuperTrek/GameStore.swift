@@ -8,6 +8,14 @@ struct Burst: Identifiable, Hashable {
     var position: SectorPosition
 }
 
+/// Something the engine has already removed but the player hasn't seen die yet.
+struct Ghost: Identifiable, Hashable {
+    var id: Int
+    var position: SectorPosition
+    var content: SectorContent
+    var kind: EnemyKind?
+}
+
 struct LongRangeScan: Hashable {
     var center: QuadrantPosition
     var cells: [LongRangeCell]
@@ -46,6 +54,7 @@ final class GameStore {
     /// Counters the bridge watches to trigger flashes and haptics.
     private(set) var bursts: [Burst] = []
     private var nextBurstID = 0
+    private(set) var ghosts: [Ghost] = []
     private(set) var shots: [Shot] = []
     private var nextShotID = 0
     private(set) var hitPulse = 0
@@ -153,32 +162,52 @@ final class GameStore {
         let events = game.apply(command)
         self.game = game
         append(events)
+        torpedoInFlight = false
         for event in events {
             switch event {
             case let .longRangeScan(center, cells):
                 lastLongRangeScan = LongRangeScan(center: center, cells: cells)
             case let .enemyDestroyed(position, _), let .starbaseDestroyed(position):
-                explode(at: position)
+                let ghost = torpedoInFlight
+                    ? before.map[position].map { Ghost(id: nextBurstID, position: position, content: $0, kind: before.enemy(at: position)?.kind) }
+                    : nil
+                explode(at: position, after: torpedoInFlight ? FireLinesView.torpedoFlightTime : 0, keeping: ghost)
             case let .hitOnShip(_, from, _, _):
                 fire(from: from, to: game.sector, kind: .enemyFire)
             case let .beamHit(_, at, _), let .beamNoDamage(at):
                 fire(from: game.sector, to: at, kind: .beam)
+            case let .torpedoTrack(track):
+                if let end = track.last {
+                    fire(from: game.sector, to: end, kind: .torpedo)
+                    torpedoInFlight = true
+                }
             default:
                 break
             }
         }
         let moved = game.stardate != before.stardate || game.sector != before.sector
-        play(TurnEffects.derive(from: command, events: events, moved: moved))
+        play(TurnEffects.derive(from: command, events: events, moved: moved), explosionDelay: torpedoInFlight ? FireLinesView.torpedoFlightTime : 0)
         save()
     }
 
-    private func explode(at position: SectorPosition) {
+    /// True while the most recent command's torpedo is still crossing the grid.
+    private var torpedoInFlight = false
+
+    private func explode(at position: SectorPosition, after delay: TimeInterval = 0, keeping ghost: Ghost? = nil) {
         let burst = Burst(id: nextBurstID, position: position)
         nextBurstID += 1
-        bursts.append(burst)
-        // `-freezeBursts` keeps explosions on screen for screenshots.
-        guard !UserDefaults.standard.bool(forKey: "freezeBursts") else { return }
+        let frozen = UserDefaults.standard.bool(forKey: "freezeBursts")
+        if let ghost { ghosts.append(ghost) }
+        // Frozen with a torpedo in flight: hold the ghost and never explode (screenshots).
+        if frozen, ghost != nil { return }
         Task {
+            if delay > 0, !frozen {
+                try? await Task.sleep(for: .seconds(delay))
+            }
+            if let ghost { ghosts.removeAll { $0.id == ghost.id } }
+            bursts.append(burst)
+            // `-freezeBursts` keeps explosions on screen for screenshots.
+            guard !frozen else { return }
             try? await Task.sleep(for: .seconds(StarBurstView.duration + 0.1))
             bursts.removeAll { $0.id == burst.id }
         }
@@ -195,13 +224,24 @@ final class GameStore {
         }
     }
 
-    private func play(_ effects: TurnEffects) {
+    private func play(_ effects: TurnEffects, explosionDelay: TimeInterval = 0) {
         if effects.hits > 0 { hitPulse += 1 }
-        if effects.enemyDestroyed { explosionPulse += 1 }
         if effects.refused { refusalPulse += 1 }
-        guard FeedbackSettings.soundEnabled else { return }
-        for sound in effects.sounds {
-            sounds.play(sound)
+        let soundOn = FeedbackSettings.soundEnabled
+        // Explosions wait for a torpedo to arrive; everything else is immediate.
+        for sound in effects.sounds where sound != .explosion || explosionDelay == 0 {
+            if soundOn { sounds.play(sound) }
+        }
+        if explosionDelay == 0 {
+            if effects.enemyDestroyed { explosionPulse += 1 }
+            return
+        }
+        if effects.enemyDestroyed || effects.sounds.contains(.explosion) {
+            Task {
+                try? await Task.sleep(for: .seconds(explosionDelay))
+                if effects.enemyDestroyed { explosionPulse += 1 }
+                if soundOn { sounds.play(.explosion) }
+            }
         }
     }
 

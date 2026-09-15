@@ -15,7 +15,7 @@ struct BridgeView: View {
             GeometryReader { geometry in
             let gridSide = geometry.size.width - 32  // its frame is drawn 4pt outside, so this lines up with the box below
             VStack(spacing: 0) {
-                SectorGridView(game: game, highlights: highlights(game), bursts: store.bursts, shots: store.shots, onTap: { tapped($0, game: game) })
+                SectorGridView(game: game, highlights: highlights(game), bursts: store.bursts, shots: store.shots, ghosts: store.ghosts, onTap: { tapped($0, game: game) })
                     .keyframeAnimator(initialValue: 0.0, trigger: store.hitPulse) { view, offset in
                         view.offset(x: offset)
                     } keyframes: { _ in
