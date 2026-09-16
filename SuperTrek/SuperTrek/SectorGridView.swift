@@ -78,7 +78,7 @@ struct SectorGridView: View {
             }
             .overlay {
                 ForEach(bursts) { burst in
-                    StarBurstView(size: cell)
+                    StarBurstView(size: cell, start: burst.started)
                         .position(
                             x: labelWidth + spacing + CGFloat(burst.position.col - 1) * (cell + spacing) + cell / 2,
                             y: 12 + spacing + CGFloat(burst.position.row - 1) * (cell + spacing) + cell / 2

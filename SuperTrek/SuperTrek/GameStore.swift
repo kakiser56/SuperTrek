@@ -6,6 +6,7 @@ import TrekEngine
 struct Burst: Identifiable, Hashable {
     var id: Int
     var position: SectorPosition
+    var started = Date()
 }
 
 /// Something the engine has already removed but the player hasn't seen die yet.
@@ -194,7 +195,7 @@ final class GameStore {
     private var torpedoInFlight = false
 
     private func explode(at position: SectorPosition, after delay: TimeInterval = 0, keeping ghost: Ghost? = nil) {
-        let burst = Burst(id: nextBurstID, position: position)
+        let id = nextBurstID
         nextBurstID += 1
         let frozen = UserDefaults.standard.bool(forKey: "freezeBursts")
         if let ghost { ghosts.append(ghost) }
@@ -205,6 +206,7 @@ final class GameStore {
                 try? await Task.sleep(for: .seconds(delay))
             }
             if let ghost { ghosts.removeAll { $0.id == ghost.id } }
+            let burst = Burst(id: id, position: position)
             bursts.append(burst)
             // `-freezeBursts` keeps explosions on screen for screenshots.
             guard !frozen else { return }

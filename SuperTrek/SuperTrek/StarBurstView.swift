@@ -5,7 +5,8 @@ import SwiftUI
 struct StarBurstView: View {
     static let duration: TimeInterval = 0.8
     let size: CGFloat
-    private let start = Date()
+    /// Supplied by the burst record so a view rebuild can't restart it.
+    let start: Date
 
     var body: some View {
         TimelineView(.animation) { context in

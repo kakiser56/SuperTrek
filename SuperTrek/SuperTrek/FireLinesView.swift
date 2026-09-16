@@ -8,6 +8,8 @@ struct Shot: Identifiable, Hashable {
     var from: SectorPosition
     var to: SectorPosition
     var kind: Kind
+    /// When it was fired. Lives in the data so a view rebuild can't restart it.
+    var fired = Date()
 }
 
 /// Draws shots as dashed lines whose dashes crawl toward the target and
@@ -20,15 +22,14 @@ struct FireLinesView: View {
     let cell: CGFloat
     let labelWidth: CGFloat
     let spacing: CGFloat
-    private let start = Date()
 
     var body: some View {
         TimelineView(.animation) { context in
             let frozen = UserDefaults.standard.bool(forKey: "freezeBursts")
-            let elapsed = frozen ? 0.5 : context.date.timeIntervalSince(start)
-            let progress = min(1, elapsed / Self.duration)
             Canvas { ctx, _ in
                 for shot in shots {
+                    let elapsed = frozen ? 0.5 : context.date.timeIntervalSince(shot.fired)
+                    let progress = min(1, elapsed / Self.duration)
                     let a = center(of: shot.from)
                     let b = center(of: shot.to)
                     var line = Path()
@@ -41,24 +42,29 @@ struct FireLinesView: View {
                     }
                     let fade = progress < 0.7 ? 1 : (1 - progress) / 0.3
                     let phase = -CGFloat(elapsed * 60)
-                    // A torpedo's trail only exists as far as the torpedo has flown.
+                    // A torpedo is a projectile, not a beam: a circle crossing the grid, no line.
                     let travel = shot.kind == .torpedo ? min(1, progress / 0.45) : 1
                     let tip = CGPoint(x: a.x + (b.x - a.x) * travel, y: a.y + (b.y - a.y) * travel)
-                    if shot.kind == .torpedo {
-                        line = Path()
-                        line.move(to: a)
-                        line.addLine(to: tip)
-                    }
-                    ctx.stroke(
-                        line,
-                        with: .color(color.opacity(fade)),
-                        style: StrokeStyle(lineWidth: shot.kind == .beam ? 2 : 2.5, lineCap: .round, dash: [5, 7], dashPhase: phase)
-                    )
-                    if shot.kind == .torpedo, travel < 1 {
-                        // The torpedo itself, in flight.
-                        let head = Path(ellipseIn: CGRect(x: tip.x - 4, y: tip.y - 4, width: 8, height: 8))
-                        ctx.fill(head, with: .color(Color.white.opacity(0.95)))
-                        ctx.fill(Path(ellipseIn: CGRect(x: tip.x - 8, y: tip.y - 8, width: 16, height: 16)), with: .color(color.opacity(0.4)))
+                    if shot.kind != .torpedo {
+                        ctx.stroke(
+                            line,
+                            with: .color(color.opacity(fade)),
+                            style: StrokeStyle(lineWidth: shot.kind == .beam ? 2 : 2.5, lineCap: .round, dash: [5, 7], dashPhase: phase)
+                        )
+                    } else if travel < 1 {
+                        let radius = cell * 0.18
+                        ctx.fill(
+                            Path(ellipseIn: CGRect(x: tip.x - radius * 2, y: tip.y - radius * 2, width: radius * 4, height: radius * 4)),
+                            with: .color(color.opacity(0.3))
+                        )
+                        ctx.fill(
+                            Path(ellipseIn: CGRect(x: tip.x - radius, y: tip.y - radius, width: radius * 2, height: radius * 2)),
+                            with: .color(color)
+                        )
+                        ctx.fill(
+                            Path(ellipseIn: CGRect(x: tip.x - radius * 0.5, y: tip.y - radius * 0.5, width: radius, height: radius)),
+                            with: .color(Color.white.opacity(0.95))
+                        )
                     }
                     // A small flare where the shot lands.
                     if travel >= 1 {
