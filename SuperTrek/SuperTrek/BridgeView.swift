@@ -13,7 +13,11 @@ struct BridgeView: View {
     var body: some View {
         if let game = store.game {
             GeometryReader { geometry in
-            let gridSide = geometry.size.width - 32  // its frame is drawn 4pt outside, so this lines up with the box below
+            // Full width where the screen is tall enough; on short screens leave room
+            // for a dozen log lines and the command bar.
+            let compact = geometry.size.height < 700
+            let gridSide = min(geometry.size.width - 32, geometry.size.height - (compact ? 360 : 345))
+            let logColumns = LogView.columns(forWidth: geometry.size.width - 24 - 92 - 12 - 1)
             VStack(spacing: 0) {
                 SectorGridView(game: game, highlights: highlights(game), bursts: store.bursts, shots: store.shots, ghosts: store.ghosts, onTap: { tapped($0, game: game) })
                     .keyframeAnimator(initialValue: 0.0, trigger: store.hitPulse) { view, offset in
@@ -37,10 +41,10 @@ struct BridgeView: View {
                     .padding(.top, 10)
                     .padding(.bottom, 8)
                 HStack(alignment: .top, spacing: 0) {
-                    LogView(lines: store.log)
+                    LogView(lines: store.log, columns: logColumns)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     Rectangle().frame(width: 1).foregroundStyle(Theme.dim)
-                    ReadoutPanel(game: game, lexicon: store.lexicon)
+                    ReadoutPanel(game: game, lexicon: store.lexicon, compact: compact)
                         .frame(width: 92)
                         .padding(.horizontal, 6)
                 }

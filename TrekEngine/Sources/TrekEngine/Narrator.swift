@@ -24,7 +24,7 @@ public struct Narrator: Sendable {
 
     /// Greedy word wrap that keeps a line's leading indent and indents
     /// continuation lines two spaces further.
-    func wrap(_ line: String) -> [String] {
+    public func wrap(_ line: String) -> [String] {
         guard line.count > columns else { return [line] }
         let lead = line.prefix { $0 == " " }.count
         let words = line.split(separator: " ", omittingEmptySubsequences: true).map(String.init)

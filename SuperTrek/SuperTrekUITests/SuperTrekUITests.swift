@@ -103,7 +103,7 @@ final class SuperTrekUITests: XCTestCase {
         app.buttons["length.long"].tap()
         app.buttons["skill.expert"].tap()
         app.buttons["newgame.begin"].tap()
-        XCTAssertTrue(logContains(app, "THIS IS A LONG GAME AT EXPERT SKILL."))
+        XCTAssertTrue(logContains(app, "LONG GAME AT EXPERT"))  // short enough not to wrap on a 4.7-inch log
     }
 
     func testCancelReturnsToCommands() {

@@ -62,8 +62,8 @@ final class GameStore {
     private(set) var explosionPulse = 0
     private(set) var refusalPulse = 0
     private let sounds = SoundBank()
-    /// Wrapped for the log column beside the readout.
-    let narrator = Narrator(columns: 38)
+    /// Lines are stored unwrapped; LogView wraps them to the width it has.
+    let narrator = Narrator(columns: .max)
     let lexicon = Lexicon.standard
 
     private var nextLineID = 0
