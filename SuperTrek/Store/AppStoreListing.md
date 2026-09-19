@@ -45,7 +45,7 @@ No ads. No accounts. No data collected. Works offline.
 UNIX is a registered trademark of The Open Group. Super Trek is an independent work and is not affiliated with or endorsed by any television or film franchise.
 
 ## Keywords (100, comma separated)
-retro,text,strategy,space,turn based,terminal,classic,1970s,unix,basic,galaxy,warp,torpedo,sim
+retro,text,strategy,space,turn based,terminal,classic,star,unix,basic,galaxy,warp,torpedo,sim
 
 ## What's New (first release)
 First release. The complete 1978 rule set, touch controls, sound and haptics, and save-anywhere play.
