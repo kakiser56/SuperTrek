@@ -41,7 +41,7 @@ struct HelpView: View {
                 section("STRATEGY") {
                     tip("Keep shields up in any quadrant with enemies. Enemy fire lands on your shields, and a hit that empties them destroys the ship.")
                     tip("Scan before you jump. A long range scan shows what waits in the quadrants around you.")
-                    tip("Torpedoes are sure kills but limited to ten. Lasers cost energy but never run out. Use torpedoes on distant or dangerous targets and lasers up close.")
+                    tip("Torpedoes are sure kills but limited to ten. Phasers cost energy but never run out. Use torpedoes on distant or dangerous targets and phasers up close.")
                     tip("Each move costs its length in sectors plus ten energy. Never let total energy fall near ten, or the ship is stranded.")
                     tip("Cross the galaxy in one jump. Time, not distance, is the scarce resource.")
                     tip("Go home when you are hurt. A starbase repairs everything, and starbase shields protect a docked ship.")

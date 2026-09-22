@@ -57,11 +57,11 @@ final class SuperTrekUITests: XCTestCase {
 
     func testBeamsPanelFires() {
         let app = launch()
-        app.buttons["command.LAS"].tap()
+        app.buttons["command.PHA"].tap()
         XCTAssertTrue(app.buttons["energy.commit"].waitForExistence(timeout: 3))
         app.buttons["500"].tap()
         app.buttons["energy.commit"].tap()
-        XCTAssertTrue(logContains(app, "> LAS 500"))
+        XCTAssertTrue(logContains(app, "> PHA 500"))
         XCTAssertTrue(logContains(app, "UNIT HIT ON INVADER"))
     }
 

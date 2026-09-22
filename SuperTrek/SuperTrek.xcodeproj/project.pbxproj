@@ -63,8 +63,8 @@
 		BEE9C6C32C49B54986591E81 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		C48DD7295C9D24933ACB8953 /* SuperTrekUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperTrekUITests.swift; sourceTree = "<group>"; };
 		C58A1450DC0897DE52331373 /* SuperTrekUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SuperTrekUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D09910C3686687E4B07A3CC3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		DC5B897BEE7CB0E1F01E3577 /* SuperTrek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuperTrek.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D09910C3686687E4B07A3CC3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		DC5B897BEE7CB0E1F01E3577 /* SuperTrek.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SuperTrek.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1236E404F8A96F690BCFCDB /* BridgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeView.swift; sourceTree = "<group>"; };
 		FE9A4C7DF2B6BE23E5EB2F51 /* GameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -200,6 +200,7 @@
 						TestTargetID = 6BDECA001739EA9EFDBFFA0C;
 					};
 					6BDECA001739EA9EFDBFFA0C = {
+						DevelopmentTeam = QE3GSQ7TYQ;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -430,8 +431,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ASH9E9QJDK;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = QE3GSQ7TYQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SuperTrek/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Super Trek";
@@ -441,7 +442,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiserapps.supertrek;
 				SDKROOT = iphoneos;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -457,8 +458,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ASH9E9QJDK;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = QE3GSQ7TYQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SuperTrek/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Super Trek";
@@ -468,7 +469,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiserapps.supertrek;
 				SDKROOT = iphoneos;
 				SWIFT_STRICT_CONCURRENCY = complete;

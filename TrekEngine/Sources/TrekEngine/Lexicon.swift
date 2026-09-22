@@ -32,7 +32,7 @@ public struct Lexicon: Hashable, Codable, Sendable {
         warbirdName: String = "WARBIRD",
         alliance: String = "ALLIANCE",
         command: String = "FLEET COMMAND",
-        beamWeapon: String = "LASER",
+        beamWeapon: String = "PHASER",
         torpedo: String = "TORPEDO",
         torpedoPlural: String = "TORPEDOES",
         helm: String = "THE HELMSMAN",

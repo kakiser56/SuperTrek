@@ -9,7 +9,7 @@ Super Trek
 Command a starship, 1978 style
 
 ## Promotional text (170)
-Warp between quadrants, hunt invaders with lasers and torpedoes, and dock to resupply before the deadline. The 1970s text classic, rebuilt for one thumb.
+Warp between quadrants, hunt invaders with phasers and torpedoes, and dock to resupply before the deadline. The 1970s text classic, rebuilt for one thumb.
 
 ## Description (4000)
 Super Trek is a faithful, touch-first remake of the classic 1970s starship command game that shipped with UNIX™ as "trek" and in BASIC as "Super Star Trek".
@@ -17,19 +17,19 @@ Super Trek is a faithful, touch-first remake of the classic 1970s starship comma
 You command the starship Vanguard. Invader warships have entered the galaxy, and you have a limited number of stardates to hunt down every one of them before they reach Alliance headquarters. Along the way you will manage energy, shields, and torpedoes, repair damaged systems, and dock at starbases to resupply.
 
 THE ORIGINAL RULES
-Every formula is ported from the 1978 BASIC listing. The galaxy is 8 by 8 quadrants of 8 by 8 sectors. Enemies relocate and fire when you move. Lasers lose power with distance. Torpedoes follow a course and stop at the first thing they hit. Damaged systems mend with travel time or with a repair order at a starbase. Time is measured in stardates, and the mission clock does not wait.
+Every formula is ported from the 1978 BASIC listing. The galaxy is 8 by 8 quadrants of 8 by 8 sectors. Enemies relocate and fire when you move. Phasers lose power with distance. Torpedoes follow a course and stop at the first thing they hit. Damaged systems mend with travel time or with a repair order at a starbase. Time is measured in stardates, and the mission clock does not wait.
 
 MADE FOR THE PHONE
 • Tap a sector to plot a course and see the projected path before you engage.
 • Tap an enemy to aim a torpedo and see its track.
 • A compass dial for the nine-point course system, with warp factor by slider.
-• Lasers and shields by slider with quick presets.
+• Phasers and shields by slider with quick presets.
 • The library computer's galactic record is a tappable chart: touch a quadrant to plot a jump.
 • Enemy fire, hits, explosions, and warp jumps are shown on the grid with sound and haptics.
 • Your game saves after every command. Pick it up exactly where you left off.
 
 THE TERMINAL FEEL
-Green phosphor on black. The eight-line readout beside the sector grid. A scrolling log that narrates the mission the way the teletype did. The original three-letter commands: NAV, SRS, LRS, LAS, TOR, SHE, DAM, COM, and XXX.
+Green phosphor on black. The eight-line readout beside the sector grid. A scrolling log that narrates the mission the way the teletype did. The original three-letter commands: NAV, SRS, LRS, PHA, TOR, SHE, DAM, COM, and XXX.
 
 TWO KINDS OF INVADER
 Battle cruisers, marked +K+, are the classic enemy. Warbirds, marked +R+, carry weaker shields but hit harder. Every quadrant deals a mix.
@@ -47,7 +47,10 @@ UNIX is a registered trademark of The Open Group. Super Trek is an independent w
 ## Keywords (100, comma separated)
 retro,text,strategy,space,turn based,terminal,classic,star,unix,basic,galaxy,warp,torpedo,sim
 
-## What's New (first release)
+## What's New (1.1)
+A bolder app icon, phasers under their proper name, and layout fixes for 4.7-inch iPhones.
+
+## What's New (1.0)
 First release. The complete 1978 rule set, touch controls, sound and haptics, and save-anywhere play.
 
 ## Category

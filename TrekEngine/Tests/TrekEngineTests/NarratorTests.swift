@@ -9,7 +9,7 @@ struct NarratorTests {
         let lines = Narrator().lines(for: events)
         #expect(lines.count > 10)
         let text = lines.joined(separator: "\n")
-        for banned in ["KLINGON", "ROMULAN", "ENTERPRISE", "FEDERATION", "PHASER", "PHOTON", "STARFLEET", "SPOCK", "SULU", "SCOTT", "UHURA"] {
+        for banned in ["KLINGON", "ROMULAN", "ENTERPRISE", "FEDERATION", "PHOTON", "STARFLEET", "SPOCK", "SULU", "SCOTT", "UHURA"] {
             #expect(!text.contains(banned), "found \(banned)")
         }
     }
