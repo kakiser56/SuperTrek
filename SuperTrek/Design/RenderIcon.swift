@@ -93,6 +93,14 @@ while y < size {
 }
 
 NSGraphicsContext.restoreGraphicsState()
-let png = rep.representation(using: .png, properties: [:])!
-try! png.write(to: URL(fileURLWithPath: CommandLine.arguments[1]))
-print("wrote", CommandLine.arguments[1], rep.pixelsWide, "x", rep.pixelsHigh)
+
+// Flatten to a PNG with no alpha channel; App Store Connect rejects icons that carry one.
+let drawn = rep.cgImage!
+let flat = CGContext(data: nil, width: drawn.width, height: drawn.height, bitsPerComponent: 8, bytesPerRow: 0,
+                     space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)!
+flat.draw(drawn, in: CGRect(x: 0, y: 0, width: drawn.width, height: drawn.height))
+let out = URL(fileURLWithPath: CommandLine.arguments[1]) as CFURL
+let dest = CGImageDestinationCreateWithURL(out, "public.png" as CFString, 1, nil)!
+CGImageDestinationAddImage(dest, flat.makeImage()!, nil)
+CGImageDestinationFinalize(dest)
+print("wrote", CommandLine.arguments[1], drawn.width, "x", drawn.height)
