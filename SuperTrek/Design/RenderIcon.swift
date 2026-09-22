@@ -10,7 +10,7 @@ NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
 let ctx = NSGraphicsContext.current!.cgContext
 
 let phosphor = NSColor(red: 0.2, green: 1.0, blue: 0.3, alpha: 1)
-let dim = phosphor.withAlphaComponent(0.22)
+let dim = phosphor.withAlphaComponent(0.13)
 let amber = NSColor(red: 1.0, green: 0.75, blue: 0.2, alpha: 1)
 let alert = NSColor(red: 1.0, green: 0.3, blue: 0.3, alpha: 1)
 let cyan = NSColor(red: 0.4, green: 0.9, blue: 1.0, alpha: 1)
@@ -19,7 +19,7 @@ let cyan = NSColor(red: 0.4, green: 0.9, blue: 1.0, alpha: 1)
 NSColor(red: 0.01, green: 0.03, blue: 0.015, alpha: 1).setFill()
 ctx.fill(CGRect(x: 0, y: 0, width: size, height: size))
 let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: [
-    NSColor(red: 0.05, green: 0.16, blue: 0.07, alpha: 1).cgColor,
+    NSColor(red: 0.07, green: 0.24, blue: 0.10, alpha: 1).cgColor,
     NSColor(red: 0.01, green: 0.03, blue: 0.015, alpha: 1).cgColor,
 ] as CFArray, locations: [0, 1])!
 ctx.drawRadialGradient(gradient, startCenter: CGPoint(x: size / 2, y: size / 2), startRadius: 0,
@@ -32,13 +32,13 @@ let gridSize = size - inset * 2
 let cell = gridSize / CGFloat(cells)
 ctx.setStrokeColor(dim.cgColor)
 ctx.setLineWidth(3)
-for i in 0...cells {
+for i in 0...cells where false {
     let p = inset + CGFloat(i) * cell
     ctx.move(to: CGPoint(x: p, y: inset)); ctx.addLine(to: CGPoint(x: p, y: inset + gridSize))
     ctx.move(to: CGPoint(x: inset, y: p)); ctx.addLine(to: CGPoint(x: inset + gridSize, y: p))
 }
 ctx.strokePath()
-ctx.setFillColor(dim.cgColor)
+ctx.setFillColor(dim.withAlphaComponent(0.35).cgColor)
 for r in 0..<cells {
     for c in 0..<cells {
         let x = inset + (CGFloat(c) + 0.5) * cell
@@ -61,26 +61,31 @@ func draw(_ text: String, row: Int, col: Int, color: NSColor, scale: CGFloat = 1
     ctx.restoreGState()
 }
 
-draw("*", row: 2, col: 2, color: amber, scale: 1.2)
-draw("*", row: 7, col: 7, color: amber, scale: 1.2)
-draw(">!<", row: 7, col: 2, color: cyan, scale: 1.05)
-draw("+K+", row: 2, col: 7, color: alert, scale: 1.05)
+draw("*", row: 2, col: 2, color: amber.withAlphaComponent(0.7), scale: 1.1, glow: 10)
+draw("*", row: 8, col: 7, color: amber.withAlphaComponent(0.7), scale: 1.1, glow: 10)
+draw(">!<", row: 8, col: 2, color: cyan.withAlphaComponent(0.7), scale: 0.95, glow: 10)
+draw("+K+", row: 1, col: 7, color: alert.withAlphaComponent(0.85), scale: 0.95, glow: 12)
 
 // Torpedo track from the ship toward the enemy.
 ctx.setStrokeColor(alert.withAlphaComponent(0.55).cgColor)
 ctx.setLineWidth(7)
 ctx.setLineDash(phase: 0, lengths: [5, 24])
 ctx.setLineCap(.round)
-ctx.move(to: CGPoint(x: inset + 5.2 * cell + 30, y: inset + 4.2 * cell + 30))
-ctx.addLine(to: CGPoint(x: inset + 6.5 * cell - 70, y: inset + 6.5 * cell - 70))
+ctx.move(to: CGPoint(x: inset + 5.6 * cell + 40, y: inset + 5.6 * cell + 40))
+ctx.addLine(to: CGPoint(x: inset + 6.5 * cell - 40, y: inset + 7.5 * cell - 40))
 ctx.strokePath()
 ctx.setLineDash(phase: 0, lengths: [])
 
 // The ship, large and glowing, centered on the grid.
-draw("<*>", row: 5, col: 5, color: phosphor, scale: 4.3, glow: 60, weight: .heavy)
+draw("<*>", row: 5, col: 5, color: phosphor, scale: 6.4, glow: 90, weight: .heavy)
 
+// Screen edge glow: a rounded frame like a CRT bezel.
+ctx.setStrokeColor(phosphor.withAlphaComponent(0.35).cgColor)
+ctx.setLineWidth(6)
+ctx.addPath(CGPath(roundedRect: CGRect(x: 56, y: 56, width: size - 112, height: size - 112), cornerWidth: 70, cornerHeight: 70, transform: nil))
+ctx.strokePath()
 // CRT scanlines.
-ctx.setFillColor(NSColor.black.withAlphaComponent(0.10).cgColor)
+ctx.setFillColor(NSColor.black.withAlphaComponent(0.14).cgColor)
 var y: CGFloat = 0
 while y < size {
     ctx.fill(CGRect(x: 0, y: y, width: size, height: 4))
