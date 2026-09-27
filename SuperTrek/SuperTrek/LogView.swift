@@ -6,10 +6,11 @@ struct LogView: View {
     let lines: [LogLine]
     /// Characters per line; lines longer than this wrap with a hanging indent.
     var columns: Int = 38
+    var fontSize: CGFloat = 11
 
-    /// Monospaced 11pt is about 6.65 points per character.
-    static func columns(forWidth width: CGFloat) -> Int {
-        max(20, Int((width - 16) / 6.65))
+    /// A monospaced character is about 0.605 of the point size wide.
+    static func columns(forWidth width: CGFloat, fontSize: CGFloat = 11) -> Int {
+        max(20, Int((width - 16) / (fontSize * 0.605)))
     }
 
     var body: some View {
@@ -20,7 +21,7 @@ struct LogView: View {
                         VStack(alignment: .leading, spacing: 1) {
                             ForEach(Array(wrapped(line).enumerated()), id: \.offset) { _, piece in
                                 Text(styled(piece, line))
-                                    .font(Theme.mono(11, weight: line.isCommand ? .bold : .regular))
+                                    .font(Theme.mono(fontSize, weight: line.isCommand ? .bold : .regular))
                                     .foregroundStyle(line.isCommand ? Theme.amber : line.isAlert ? Theme.alert : Theme.phosphor)
                                     .lineLimit(1)
                                     .fixedSize(horizontal: true, vertical: false)

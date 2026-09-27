@@ -27,7 +27,15 @@ public struct Narrator: Sendable {
     public func wrap(_ line: String) -> [String] {
         guard line.count > columns else { return [line] }
         let lead = line.prefix { $0 == " " }.count
-        let words = line.split(separator: " ", omittingEmptySubsequences: true).map(String.init)
+        // Coordinates print as "4 , 6"; keep each one together as a single word.
+        var words: [String] = []
+        for token in line.split(separator: " ", omittingEmptySubsequences: true).map(String.init) {
+            if let last = words.last, token == "," || last.hasSuffix(" ,") {
+                words[words.count - 1] = last + " " + token
+            } else {
+                words.append(token)
+            }
+        }
         var out: [String] = []
         var current = String(repeating: " ", count: lead)
         var currentHasWord = false

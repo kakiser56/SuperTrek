@@ -10,14 +10,9 @@ struct ReadoutPanel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: compact ? 0 : 3) {
-            row("STARDATE", stardate)
-            row("CONDITION", conditionText, color: Theme.color(for: game.condition))
-            row("QUADRANT", "\(game.quadrant.row) , \(game.quadrant.col)")
-            row("SECTOR", "\(game.sector.row) , \(game.sector.col)")
-            row(lexicon.torpedoPlural, String(game.ship.torpedoes), color: game.ship.torpedoes == 0 ? Theme.amber : Theme.phosphor)
-            row("TOTAL ENERGY", String(Int(game.ship.totalEnergy)), color: game.ship.energy < 300 ? Theme.amber : Theme.phosphor)
-            row("SHIELDS", String(Int(game.ship.shields)), color: game.ship.shields < 200 && game.enemiesInQuadrant > 0 ? Theme.alert : Theme.phosphor)
-            row("\(lexicon.enemyPlural) LEFT", String(game.enemiesRemaining), color: game.enemiesInQuadrant > 0 ? Theme.alert : Theme.phosphor)
+            ForEach(Self.items(game: game, lexicon: lexicon), id: \.label) { item in
+                row(item.label, item.value, color: item.color)
+            }
         }
         .padding(.top, compact ? 4 : 8)
         .frame(maxHeight: .infinity, alignment: .top)
@@ -25,17 +20,32 @@ struct ReadoutPanel: View {
         .accessibilityIdentifier("readout")
     }
 
-    private var stardate: String {
-        game.stardate == game.stardate.rounded() ? String(Int(game.stardate)) : String(format: "%.1f", game.stardate)
+    struct Item {
+        var label: String
+        var value: String
+        var color: Color
     }
 
-    private var conditionText: String {
-        switch game.condition {
+    /// The eight lines of the original readout, with their warning colors.
+    static func items(game: Game, lexicon: Lexicon) -> [Item] {
+        let stardate = game.stardate == game.stardate.rounded() ? String(Int(game.stardate)) : String(format: "%.1f", game.stardate)
+        let condition = switch game.condition {
         case .docked: "DOCKED"
         case .red: "*RED*"
         case .yellow: "YELLOW"
         case .green: "GREEN"
         }
+        let p = Theme.phosphor
+        return [
+            Item(label: "STARDATE", value: stardate, color: p),
+            Item(label: "CONDITION", value: condition, color: Theme.color(for: game.condition)),
+            Item(label: "QUADRANT", value: "\(game.quadrant.row) , \(game.quadrant.col)", color: p),
+            Item(label: "SECTOR", value: "\(game.sector.row) , \(game.sector.col)", color: p),
+            Item(label: lexicon.torpedoPlural, value: String(game.ship.torpedoes), color: game.ship.torpedoes == 0 ? Theme.amber : p),
+            Item(label: "TOTAL ENERGY", value: String(Int(game.ship.totalEnergy)), color: game.ship.energy < 300 ? Theme.amber : p),
+            Item(label: "SHIELDS", value: String(Int(game.ship.shields)), color: game.ship.shields < 200 && game.enemiesInQuadrant > 0 ? Theme.alert : p),
+            Item(label: "\(lexicon.enemyPlural) LEFT", value: String(game.enemiesRemaining), color: game.enemiesInQuadrant > 0 ? Theme.alert : p),
+        ]
     }
 
     /// Label over value, so the panel fits a narrow column.

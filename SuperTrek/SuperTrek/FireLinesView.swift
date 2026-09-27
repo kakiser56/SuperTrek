@@ -21,6 +21,7 @@ struct FireLinesView: View {
     let shots: [Shot]
     let cell: CGFloat
     let labelWidth: CGFloat
+    var header: CGFloat = 12
     let spacing: CGFloat
 
     var body: some View {
@@ -82,7 +83,7 @@ struct FireLinesView: View {
     private func center(of position: SectorPosition) -> CGPoint {
         CGPoint(
             x: labelWidth + spacing + CGFloat(position.col - 1) * (cell + spacing) + cell / 2,
-            y: 12 + spacing + CGFloat(position.row - 1) * (cell + spacing) + cell / 2
+            y: header + spacing + CGFloat(position.row - 1) * (cell + spacing) + cell / 2
         )
     }
 }

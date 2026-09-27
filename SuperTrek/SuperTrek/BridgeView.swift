@@ -13,48 +13,7 @@ struct BridgeView: View {
     var body: some View {
         if let game = store.game {
             GeometryReader { geometry in
-            // Full width where the screen is tall enough; on short screens leave room
-            // for a dozen log lines and the command bar.
-            let compact = geometry.size.height < 700
-            let gridSide = min(geometry.size.width - 32, geometry.size.height - (compact ? 360 : 345))
-            let logColumns = LogView.columns(forWidth: geometry.size.width - 24 - 92 - 12 - 1)
-            VStack(spacing: 0) {
-                SectorGridView(game: game, highlights: highlights(game), bursts: store.bursts, shots: store.shots, ghosts: store.ghosts, onTap: { tapped($0, game: game) })
-                    .keyframeAnimator(initialValue: 0.0, trigger: store.hitPulse) { view, offset in
-                        view.offset(x: offset)
-                    } keyframes: { _ in
-                        KeyframeTrack {
-                            LinearKeyframe(-9, duration: 0.04)
-                            LinearKeyframe(8, duration: 0.05)
-                            LinearKeyframe(-6, duration: 0.05)
-                            LinearKeyframe(4, duration: 0.05)
-                            LinearKeyframe(0, duration: 0.06)
-                        }
-                    }
-                    .overlay {
-                        if let scan = store.lastLongRangeScan {
-                            LongRangeOverlay(scan: scan) { store.dismissLongRangeScan() }
-                        }
-                    }
-                    .frame(width: gridSide, height: gridSide)
-                    .padding(.horizontal, 12)
-                    .padding(.top, 10)
-                    .padding(.bottom, 8)
-                HStack(alignment: .top, spacing: 0) {
-                    LogView(lines: store.log, columns: logColumns)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    Rectangle().frame(width: 1).foregroundStyle(Theme.dim)
-                    ReadoutPanel(game: game, lexicon: store.lexicon, compact: compact)
-                        .frame(width: 92)
-                        .padding(.horizontal, 6)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .overlay(Rectangle().stroke(Theme.dim, lineWidth: 1))
-                .padding(.horizontal, 12)
-                panel(game)
-                    .padding(12)
-                    .animation(.easeOut(duration: 0.15), value: mode == .commands)
-            }
+            layout(game, size: geometry.size)
             .background(Theme.background.ignoresSafeArea())
             .overlay {
                 Theme.alert.opacity(flashOpacity)
@@ -106,13 +65,167 @@ struct BridgeView: View {
         }
     }
 
+    // MARK: Layouts
+
+    /// iPad-sized space gets the full board; anything narrower, including
+    /// an iPad app squeezed in Split View, gets the phone layout.
+    @ViewBuilder
+    private func layout(_ game: Game, size: CGSize) -> some View {
+        if size.width >= 700 && size.height >= 700 {
+            if size.width > size.height {
+                padLandscape(game, size: size)
+            } else {
+                padPortrait(game, size: size)
+            }
+        } else {
+            phoneLayout(game, size: size)
+        }
+    }
+
+    /// The sector grid with its hit shake. The phone floats the long range
+    /// scan over it; the iPad shows the scan in its own panel instead.
+    private func grid(_ game: Game, scanOverlay: Bool) -> some View {
+        SectorGridView(game: game, highlights: highlights(game), bursts: store.bursts, shots: store.shots, ghosts: store.ghosts, onTap: { tapped($0, game: game) })
+            .keyframeAnimator(initialValue: 0.0, trigger: store.hitPulse) { view, offset in
+                view.offset(x: offset)
+            } keyframes: { _ in
+                KeyframeTrack {
+                    LinearKeyframe(-9, duration: 0.04)
+                    LinearKeyframe(8, duration: 0.05)
+                    LinearKeyframe(-6, duration: 0.05)
+                    LinearKeyframe(4, duration: 0.05)
+                    LinearKeyframe(0, duration: 0.06)
+                }
+            }
+            .overlay {
+                if scanOverlay, let scan = store.lastLongRangeScan {
+                    LongRangeOverlay(scan: scan) { store.dismissLongRangeScan() }
+                }
+            }
+    }
+
+    private func phoneLayout(_ game: Game, size: CGSize) -> some View {
+        // Full width where the screen is tall enough; on short screens leave room
+        // for a dozen log lines and the command bar.
+        let compact = size.height < 700
+        let gridSide = min(size.width - 32, size.height - (compact ? 360 : 345))
+        let logColumns = LogView.columns(forWidth: size.width - 24 - 92 - 12 - 1)
+        return VStack(spacing: 0) {
+            grid(game, scanOverlay: true)
+                .frame(width: gridSide, height: gridSide)
+                .padding(.horizontal, 12)
+                .padding(.top, 10)
+                .padding(.bottom, 8)
+            HStack(alignment: .top, spacing: 0) {
+                LogView(lines: store.log, columns: logColumns)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Rectangle().frame(width: 1).foregroundStyle(Theme.dim)
+                ReadoutPanel(game: game, lexicon: store.lexicon, compact: compact)
+                    .frame(width: 92)
+                    .padding(.horizontal, 6)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay(Rectangle().stroke(Theme.dim, lineWidth: 1))
+            .padding(.horizontal, 12)
+            panel(game)
+                .padding(12)
+                .animation(.easeOut(duration: 0.15), value: mode == .commands)
+        }
+    }
+
+    /// The teletype at the classic width, in a box, for the iPad.
+    private func padLog(width: CGFloat) -> some View {
+        let fontSize: CGFloat = 15
+        return LogView(lines: store.log, columns: min(57, LogView.columns(forWidth: width - 8, fontSize: fontSize)), fontSize: fontSize)
+            .padding(4)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(Theme.dim, lineWidth: 1))
+    }
+
+    private func padPanel(_ game: Game) -> some View {
+        panel(game, large: true)
+            .frame(maxHeight: .infinity, alignment: .top)
+            .animation(.easeOut(duration: 0.15), value: mode == .commands)
+    }
+
+    private func plotTo(_ quadrant: QuadrantPosition, game: Game) {
+        guard game.status == .playing, let plot = game.plotCourse(toQuadrant: quadrant) else { return }
+        store.dismissLongRangeScan()
+        mode = .navigation(course: plot.course, warp: plot.warp)
+    }
+
+    /// Grid top left, readout and charts top right, log and commands below.
+    private func padLandscape(_ game: Game, size: CGSize) -> some View {
+        let pad: CGFloat = 24, gap: CGFloat = 16
+        let side = min((size.width - pad * 2) * 0.46, size.height - pad * 2 - gap - 300)
+        let rightWidth = size.width - pad * 2 - side - gap
+        let sideColumn = min(260, rightWidth * 0.36)
+        let commandWidth = min(440, size.width * 0.32)
+        return VStack(spacing: gap) {
+            HStack(alignment: .top, spacing: gap) {
+                grid(game, scanOverlay: false)
+                    .frame(width: side, height: side)
+                VStack(spacing: gap) {
+                    ReadoutBoard(game: game, lexicon: store.lexicon, columns: 4)
+                        .frame(height: 150)
+                    HStack(spacing: gap) {
+                        GalacticChartBoard(game: game) { plotTo($0, game: game) }
+                        VStack(spacing: gap) {
+                            LongRangeBoard(game: game)
+                            LegendBoard(lexicon: store.lexicon)
+                        }
+                        .frame(width: sideColumn)
+                    }
+                }
+            }
+            .frame(height: side)
+            HStack(alignment: .top, spacing: gap) {
+                padLog(width: size.width - pad * 2 - gap - commandWidth)
+                padPanel(game)
+                    .frame(width: commandWidth)
+            }
+        }
+        .padding(pad)
+    }
+
+    /// Grid with readout and scan beside it, the chart and legend below,
+    /// then log and commands.
+    private func padPortrait(_ game: Game, size: CGSize) -> some View {
+        let pad: CGFloat = 24, gap: CGFloat = 16
+        let side = min((size.width - pad * 2) * 0.6, size.height * 0.42)
+        let commandWidth = min(420, size.width * 0.4)
+        return VStack(spacing: gap) {
+            HStack(alignment: .top, spacing: gap) {
+                grid(game, scanOverlay: false)
+                    .frame(width: side, height: side)
+                VStack(spacing: gap) {
+                    ReadoutBoard(game: game, lexicon: store.lexicon, columns: 2)
+                    LongRangeBoard(game: game)
+                }
+            }
+            .frame(height: side)
+            HStack(spacing: gap) {
+                GalacticChartBoard(game: game) { plotTo($0, game: game) }
+                LegendBoard(lexicon: store.lexicon)
+                    .frame(width: min(280, size.width * 0.3))
+            }
+            .frame(height: size.height * 0.24)
+            HStack(alignment: .top, spacing: gap) {
+                padLog(width: size.width - pad * 2 - gap - commandWidth)
+                padPanel(game)
+                    .frame(width: commandWidth)
+            }
+        }
+        .padding(pad)
+    }
+
     // MARK: Panel
 
     @ViewBuilder
-    private func panel(_ game: Game) -> some View {
+    private func panel(_ game: Game, large: Bool = false) -> some View {
         switch mode {
         case .commands:
-            CommandBar(lexicon: store.lexicon, isPlaying: game.status == .playing, onCommand: { perform($0, game: game) })
+            CommandBar(lexicon: store.lexicon, isPlaying: game.status == .playing, large: large, onCommand: { perform($0, game: game) })
         case let .navigation(course, warp):
             NavigationPanel(
                 game: game, lexicon: store.lexicon,

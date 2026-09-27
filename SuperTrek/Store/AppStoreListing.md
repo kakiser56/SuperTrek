@@ -19,13 +19,14 @@ You command the starship Vanguard. Invader warships have entered the galaxy, and
 THE ORIGINAL RULES
 Every formula is ported from the 1978 BASIC listing. The galaxy is 8 by 8 quadrants of 8 by 8 sectors. Enemies relocate and fire when you move. Phasers lose power with distance. Torpedoes follow a course and stop at the first thing they hit. Damaged systems mend with travel time or with a repair order at a starbase. Time is measured in stardates, and the mission clock does not wait.
 
-MADE FOR THE PHONE
+MADE FOR TOUCH
 • Tap a sector to plot a course and see the projected path before you engage.
 • Tap an enemy to aim a torpedo and see its track.
 • A compass dial for the nine-point course system, with warp factor by slider.
 • Phasers and shields by slider with quick presets.
 • The library computer's galactic record is a tappable chart: touch a quadrant to plot a jump.
 • Enemy fire, hits, explosions, and warp jumps are shown on the grid with sound and haptics.
+• On iPad, the galactic record, long range scan, and legend stay on screen beside the grid.
 • Your game saves after every command. Pick it up exactly where you left off.
 
 THE TERMINAL FEEL
@@ -46,6 +47,9 @@ UNIX is a registered trademark of The Open Group. Super Trek is an independent w
 
 ## Keywords (100, comma separated)
 retro,text,strategy,space,turn based,terminal,classic,star,unix,basic,galaxy,warp,torpedo,sim
+
+## What's New (1.2)
+Super Trek now runs natively on iPad. The full-size board keeps the galactic record, long range scan, and sensor legend on screen beside the sector grid, and the log runs at the full 57-column teletype width. Portrait and landscape are both supported.
 
 ## What's New (1.1)
 A bolder app icon, phasers under their proper name, and layout fixes for 4.7-inch iPhones.

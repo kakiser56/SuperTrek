@@ -67,6 +67,7 @@ struct NewGameView: View {
             Spacer()
             Spacer()
         }
+        .frame(maxWidth: 560)
         .foregroundStyle(Theme.phosphor)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Theme.background)

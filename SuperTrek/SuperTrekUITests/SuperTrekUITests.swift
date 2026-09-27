@@ -1,6 +1,8 @@
 import XCTest
 
 final class SuperTrekUITests: XCTestCase {
+    private var isPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
+
     private func launch(fixture: String = "battle") -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["-autoFixture", fixture]
@@ -65,7 +67,8 @@ final class SuperTrekUITests: XCTestCase {
         XCTAssertTrue(logContains(app, "UNIT HIT ON INVADER"))
     }
 
-    func testLongRangeScanOverlayDismisses() {
+    func testLongRangeScanOverlayDismisses() throws {
+        try XCTSkipIf(isPad, "The iPad shows the scan in a panel, not an overlay")
         let app = launch()
         app.buttons["command.LRS"].tap()
         let overlay = app.otherElements["lrs.overlay"]
@@ -76,9 +79,14 @@ final class SuperTrekUITests: XCTestCase {
 
     func testComputerChartPlotsCourse() {
         let app = launch()
-        app.buttons["command.COM"].tap()
-        XCTAssertTrue(app.buttons["chart.6.7"].waitForExistence(timeout: 3))
-        app.buttons["chart.6.7"].tap()
+        if isPad {
+            XCTAssertTrue(app.buttons["board.chart.6.7"].waitForExistence(timeout: 3))
+            app.buttons["board.chart.6.7"].tap()
+        } else {
+            app.buttons["command.COM"].tap()
+            XCTAssertTrue(app.buttons["chart.6.7"].waitForExistence(timeout: 3))
+            app.buttons["chart.6.7"].tap()
+        }
         XCTAssertTrue(app.buttons["nav.engage"].waitForExistence(timeout: 3))
         app.buttons["nav.engage"].tap()
         XCTAssertTrue(logContains(app, "NOW ENTERING REGULUS III QUADRANT"))
@@ -104,6 +112,17 @@ final class SuperTrekUITests: XCTestCase {
         app.buttons["skill.expert"].tap()
         app.buttons["newgame.begin"].tap()
         XCTAssertTrue(logContains(app, "LONG GAME AT EXPERT"))  // short enough not to wrap on a 4.7-inch log
+    }
+
+    /// Not a check: rotates the iPad and holds so a screenshot can be taken.
+    /// Runs only with TEST_RUNNER_HOLD_LANDSCAPE=1 on the xcodebuild line.
+    func testHoldLandscapeForScreenshot() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["HOLD_LANDSCAPE"] == "1")
+        let app = XCUIApplication()
+        app.launchArguments = ["-autoFixture", "battle", "-autoCommands", "NAV,LRS"]
+        app.launch()
+        XCUIDevice.shared.orientation = .landscapeLeft
+        sleep(25)
     }
 
     func testCancelReturnsToCommands() {

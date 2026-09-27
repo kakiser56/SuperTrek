@@ -10,20 +10,42 @@ struct CommandBar: View {
 
     let lexicon: Lexicon
     let isPlaying: Bool
+    /// Big buttons that fill the space given (iPad).
+    var large = false
     var onCommand: (Action) -> Void
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
 
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 8) {
-            ForEach(Action.allCases, id: \.self) { action in
-                Button(code(action)) { onCommand(action) }
-                    .buttonStyle(TerminalButtonStyle(tint: action == .resign ? Theme.alert : Theme.phosphor))
-                    .disabled(!isPlaying)
-                    .accessibilityLabel(label(action))
-                    .accessibilityIdentifier("command.\(code(action))")
+        if large {
+            VStack(spacing: 12) {
+                ForEach(0..<3, id: \.self) { row in
+                    HStack(spacing: 12) {
+                        ForEach(0..<3, id: \.self) { col in
+                            button(Action.allCases[row * 3 + col])
+                        }
+                    }
+                }
+            }
+        } else {
+            LazyVGrid(columns: columns, spacing: 8) {
+                ForEach(Action.allCases, id: \.self) { action in
+                    button(action)
+                }
             }
         }
+    }
+
+    private func button(_ action: Action) -> some View {
+        Button(code(action)) { onCommand(action) }
+            .buttonStyle(TerminalButtonStyle(
+                tint: action == .resign ? Theme.alert : Theme.phosphor,
+                fontSize: large ? 26 : 15,
+                tall: large
+            ))
+            .disabled(!isPlaying)
+            .accessibilityLabel(label(action))
+            .accessibilityIdentifier("command.\(code(action))")
     }
 
     private func code(_ action: Action) -> String {

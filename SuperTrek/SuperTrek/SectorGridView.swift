@@ -30,50 +30,36 @@ struct SectorGridView: View {
     var ghosts: [Ghost] = []
     var onTap: (SectorPosition) -> Void
 
-    private let labelWidth: CGFloat = 14
+    private let labelWidth: CGFloat = 18
     private let spacing: CGFloat = 2
     private var sensorsOut: Bool { game.ship.isDamaged(.shortRangeSensors) }
 
     var body: some View {
         GeometryReader { geometry in
             let cell = (geometry.size.width - labelWidth - spacing * CGFloat(Game.gridSize)) / CGFloat(Game.gridSize)
+            // Phone cells are about 44pt; iPad cells about 70pt. Type scales with them.
+            let header = max(12, cell * 0.2)
+            let labelFont = max(10, cell * 0.17)
+            let glyphFont = max(13, cell * 0.31)
             Grid(horizontalSpacing: spacing, verticalSpacing: spacing) {
                 GridRow {
-                    Color.clear.frame(width: labelWidth, height: 12)
+                    Color.clear.frame(width: labelWidth, height: header)
                     ForEach(1...Game.gridSize, id: \.self) { col in
-                        Text("\(col)").font(Theme.mono(10)).foregroundStyle(Theme.dim).frame(width: cell)
+                        Text("\(col)").font(Theme.mono(labelFont)).foregroundStyle(Theme.dim).frame(width: cell, height: header)
                     }
                 }
                 ForEach(1...Game.gridSize, id: \.self) { row in
                     GridRow {
-                        Text("\(row)").font(Theme.mono(10)).foregroundStyle(Theme.dim).frame(width: labelWidth)
+                        Text("\(row)").font(Theme.mono(labelFont)).foregroundStyle(Theme.dim).frame(width: labelWidth)
                         ForEach(1...Game.gridSize, id: \.self) { col in
-                            let position = SectorPosition(row: row, col: col)
-                            let ghost = ghosts.first { $0.position == position }
-                            let content: SectorContent? = sensorsOut && game.map[position] != .ship ? nil : (ghost?.content ?? game.map[position])
-                            Button {
-                                onTap(position)
-                            } label: {
-                                let kind = content == .enemy ? (ghost?.kind ?? game.enemy(at: position)?.kind) : nil
-                                Text(sensorsOut && content == nil ? "?" : glyph(for: content, kind: kind))
-                                    .font(Theme.mono(13, weight: content == .ship ? .bold : .regular))
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.5)
-                                    .foregroundStyle(kind.map(Theme.color(for:)) ?? Theme.color(for: content))
-                                    .padding(2)
-                                    .frame(width: cell, height: cell)
-                                    .background(highlights[position]?.color ?? Theme.phosphor.opacity(0.06))
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel(accessibilityLabel(for: content, at: position))
-                            .accessibilityIdentifier("sector.\(row).\(col)")
+                            sectorCell(SectorPosition(row: row, col: col), cell: cell, glyphFont: glyphFont)
                         }
                     }
                 }
             }
             .overlay {
                 if !shots.isEmpty {
-                    FireLinesView(shots: shots, cell: cell, labelWidth: labelWidth, spacing: spacing)
+                    FireLinesView(shots: shots, cell: cell, labelWidth: labelWidth, header: header, spacing: spacing)
                 }
             }
             .overlay {
@@ -81,7 +67,7 @@ struct SectorGridView: View {
                     StarBurstView(size: cell, start: burst.started)
                         .position(
                             x: labelWidth + spacing + CGFloat(burst.position.col - 1) * (cell + spacing) + cell / 2,
-                            y: 12 + spacing + CGFloat(burst.position.row - 1) * (cell + spacing) + cell / 2
+                            y: header + spacing + CGFloat(burst.position.row - 1) * (cell + spacing) + cell / 2
                         )
                 }
             }
@@ -99,6 +85,31 @@ struct SectorGridView: View {
             }
         }
         .overlay(RoundedRectangle(cornerRadius: 4).stroke(game.condition == .red ? Theme.alert : Theme.dim, lineWidth: game.condition == .red ? 1.5 : 1).padding(-4))
+    }
+
+    private func sectorCell(_ position: SectorPosition, cell: CGFloat, glyphFont: CGFloat) -> some View {
+        let ghost = ghosts.first { $0.position == position }
+        let actual = ghost?.content ?? game.map[position]
+        let content: SectorContent? = sensorsOut && game.map[position] != .ship ? nil : actual
+        let kind: EnemyKind? = content == .enemy ? (ghost?.kind ?? game.enemy(at: position)?.kind) : nil
+        let symbol = sensorsOut && content == nil ? "?" : glyph(for: content, kind: kind)
+        let color: Color = kind.map(Theme.color(for:)) ?? Theme.color(for: content)
+        let background: Color = highlights[position]?.color ?? Theme.phosphor.opacity(0.06)
+        return Button {
+            onTap(position)
+        } label: {
+            Text(symbol)
+                .font(Theme.mono(glyphFont, weight: content == .ship ? .bold : .regular))
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+                .foregroundStyle(color)
+                .padding(2)
+                .frame(width: cell, height: cell)
+                .background(background)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(accessibilityLabel(for: content, at: position))
+        .accessibilityIdentifier("sector.\(position.row).\(position.col)")
     }
 
     private func glyph(for content: SectorContent?, kind: EnemyKind?) -> String {

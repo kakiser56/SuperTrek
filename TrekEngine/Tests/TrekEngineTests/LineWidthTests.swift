@@ -71,6 +71,7 @@ struct LineWidthTests {
         let lines = narrator.wrap("  THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG")
         #expect(lines == ["  THE QUICK BROWN", "    FOX JUMPS OVER", "    THE LAZY DOG"])
         #expect(narrator.wrap("SHORT") == ["SHORT"])
+        #expect(Narrator(columns: 24).wrap("HIT FROM WARBIRD AT SECTOR 2 , 8 NOW") == ["HIT FROM WARBIRD AT", "  SECTOR 2 , 8 NOW"])
         #expect(narrator.wrap("SUPERCALIFRAGILISTICEXPIALIDOCIOUS X") == ["SUPERCALIFRAGILISTICEXPIALIDOCIOUS", "  X"])
     }
 }

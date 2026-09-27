@@ -43,15 +43,18 @@ enum Theme {
 
 struct TerminalButtonStyle: ButtonStyle {
     var tint: Color = Theme.phosphor
+    var fontSize: CGFloat = 15
+    /// Fill the available height as well as width (iPad command bar).
+    var tall = false
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(Theme.mono(15, weight: .bold))
+            .font(Theme.mono(fontSize, weight: .bold))
             .lineLimit(1)
             .minimumScaleFactor(0.6)
             .foregroundStyle(configuration.isPressed ? Theme.background : tint)
             .padding(.vertical, 10)
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: tall ? .infinity : nil)
             .background(configuration.isPressed ? tint : Theme.background)
             .overlay(RoundedRectangle(cornerRadius: 4).stroke(tint, lineWidth: 1))
     }
