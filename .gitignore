@@ -65,3 +65,4 @@ fastlane/test_output
 DerivedData/
 .swiftpm/
 .DS_Store
+.obsidian/
