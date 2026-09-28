@@ -46,7 +46,7 @@ No ads. No accounts. No data collected. Works offline.
 retro,text,strategy,space,turn based,terminal,classic,1970s,basic,galaxy,warp,torpedo,sim,command
 
 ## What's New (1.1)
-A bolder app icon, phasers under their proper name, and layout fixes for 4.7-inch iPhones.
+A bolder app icon, the classic PHA command for the beam weapon, and layout fixes for 4.7-inch iPhones.
 
 ## What's New (1.0)
 First release. The complete 1978 rule set, touch controls, sound and haptics, and save-anywhere play.
