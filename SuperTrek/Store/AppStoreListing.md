@@ -3,7 +3,7 @@
 Field limits are App Store Connect's. Counts are verified by `Store/check.py`.
 
 ## Name (30)
-Super Trek
+Super Trek 1978
 
 ## Subtitle (30)
 Command a starship, 1978 style
@@ -12,7 +12,7 @@ Command a starship, 1978 style
 Warp between quadrants, hunt invaders with phasers and torpedoes, and dock to resupply before the deadline. The 1970s text classic, rebuilt for one thumb.
 
 ## Description (4000)
-Super Trek is a faithful, touch-first remake of the classic 1970s starship command game that shipped with UNIX™ as "trek" and in BASIC as "Super Star Trek".
+Super Trek is a faithful, touch-first remake of a classic 1970s text-based starship command game, first written in BASIC and passed from computer to computer for decades.
 
 You command the starship Vanguard. Invader warships have entered the galaxy, and you have a limited number of stardates to hunt down every one of them before they reach Alliance headquarters. Along the way you will manage energy, shields, and torpedoes, repair damaged systems, and dock at starbases to resupply.
 
@@ -36,17 +36,15 @@ TWO KINDS OF INVADER
 Battle cruisers, marked +K+, are the classic enemy. Warbirds, marked +R+, carry weaker shields but hit harder. Every quadrant deals a mix.
 
 YOUR GAME, YOUR PACE
-Before each mission, choose a length and a skill, the two questions BSD trek asked. Medium and good is the 1978 game exactly. Harder settings mean more invaders, stronger shields, and a bigger efficiency rating when you win.
+Before each mission, choose a length and a skill. Medium and good is the 1978 game exactly. Harder settings mean more invaders, stronger shields, and a bigger efficiency rating when you win.
 
 REPLAYABLE
 Every galaxy comes from a seed. Enter a seed to replay a mission or to share one with a friend. Finish the mission and the game rates your efficiency, just as the original did.
 
 No ads. No accounts. No data collected. Works offline.
 
-UNIX is a registered trademark of The Open Group. Super Trek is an independent work and is not affiliated with or endorsed by any television or film franchise.
-
 ## Keywords (100, comma separated)
-retro,text,strategy,space,turn based,terminal,classic,star,unix,basic,galaxy,warp,torpedo,sim
+retro,text,strategy,space,turn based,terminal,classic,1970s,basic,galaxy,warp,torpedo,sim,command
 
 ## What's New (1.2)
 Super Trek now runs natively on iPad. The full-size board keeps the galactic record, long range scan, and sensor legend on screen beside the sector grid, and the log runs at the full 57-column teletype width. Portrait and landscape are both supported.
@@ -71,6 +69,9 @@ https://kkiserapps.com/app-support
 
 ## Copyright
 © 2026 Keith A. Kiser
+
+## Review notes
+1.1 (2) was rejected 2026-09-28 under guideline 4.1(a) for metadata resembling "trek" and "Super Star Trek". The description no longer names the BASIC or UNIX titles, and the keywords no longer include "star" or "unix". Keep franchise titles out of all metadata fields.
 
 ## Still needed from you
 - Marketing URL (optional).
