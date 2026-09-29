@@ -6,15 +6,15 @@ Field limits are App Store Connect's. Counts are verified by `Store/check.py`.
 Super Trek 1978
 
 ## Subtitle (30)
-Command a starship, 1978 style
+Classic text space strategy
 
 ## Promotional text (170)
-Warp between quadrants, hunt invaders with phasers and torpedoes, and dock to resupply before the deadline. The 1970s text classic, rebuilt for one thumb.
+Warp between quadrants, hunt down enemy warships with phasers and torpedoes, and dock to resupply before the deadline. The 1970s text classic, rebuilt for one thumb.
 
 ## Description (4000)
-Super Trek is a faithful, touch-first remake of a classic 1970s text-based starship command game, first written in BASIC and passed from computer to computer for decades.
+Super Trek is a faithful, touch-first remake of a classic 1970s text-based space strategy game, first written in BASIC and passed from computer to computer for decades.
 
-You command the starship Vanguard. Invader warships have entered the galaxy, and you have a limited number of stardates to hunt down every one of them before they reach Alliance headquarters. Along the way you will manage energy, shields, and torpedoes, repair damaged systems, and dock at starbases to resupply.
+You are the captain of the starship Vanguard. Invader warships have entered the galaxy, and you have a limited number of stardates to hunt down every one of them before they reach Alliance headquarters. Along the way you will manage energy, shields, and torpedoes, repair damaged systems, and dock at starbases to resupply.
 
 THE ORIGINAL RULES
 Every formula is ported from the 1978 BASIC listing. The galaxy is 8 by 8 quadrants of 8 by 8 sectors. Enemies relocate and fire when you move. Phasers lose power with distance. Torpedoes follow a course and stop at the first thing they hit. Damaged systems mend with travel time or with a repair order at a starbase. Time is measured in stardates, and the mission clock does not wait.
@@ -44,7 +44,7 @@ Every galaxy comes from a seed. Enter a seed to replay a mission or to share one
 No ads. No accounts. No data collected. Works offline.
 
 ## Keywords (100, comma separated)
-retro,text,strategy,space,turn based,terminal,classic,1970s,basic,galaxy,warp,torpedo,sim,command
+retro,text,strategy,space,turn based,terminal,classic,1970s,basic,galaxy,warp,torpedo,sim,captain
 
 ## What's New (1.2)
 Super Trek now runs natively on iPad. The full-size board keeps the galactic record, long range scan, and sensor legend on screen beside the sector grid, and the log runs at the full 57-column teletype width. Portrait and landscape are both supported.
@@ -72,6 +72,7 @@ https://kkiserapps.com/app-support
 
 ## Review notes
 1.1 (2) was rejected 2026-09-28 under guideline 4.1(a) for metadata resembling "trek" and "Super Star Trek". The description no longer names the BASIC or UNIX titles, and the keywords no longer include "star" or "unix". Keep franchise titles out of all metadata fields.
+1.1 (2) was rejected again 2026-09-29 under 4.1(a) for resembling "Starship Command" (Acornsoft, 1983): never pair "starship" with "command" in metadata. Also avoid pairing "space" with "invaders" (Taito).
 
 ## Still needed from you
 - Marketing URL (optional).
