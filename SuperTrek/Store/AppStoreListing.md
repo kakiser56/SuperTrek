@@ -14,7 +14,7 @@ Warp between quadrants, hunt down enemy warships with phasers and torpedoes, and
 ## Description (4000)
 Super Trek is a faithful, touch-first remake of a classic 1970s text-based space strategy game, first written in BASIC and passed from computer to computer for decades.
 
-You are the captain of the starship Vanguard. Invader warships have entered the galaxy, and you have a limited number of stardates to hunt down every one of them before they reach Alliance headquarters. Along the way you will manage energy, shields, and torpedoes, repair damaged systems, and dock at starbases to resupply.
+You are the captain of the Vanguard. Invader warships have entered the galaxy, and you have a limited number of stardates to hunt down every one of them before they reach Alliance headquarters. Along the way you will manage energy, shields, and torpedoes, repair damaged systems, and dock at starbases to resupply.
 
 THE ORIGINAL RULES
 Every formula is ported from the 1978 BASIC listing. The galaxy is 8 by 8 quadrants of 8 by 8 sectors. Enemies relocate and fire when you move. Phasers lose power with distance. Torpedoes follow a course and stop at the first thing they hit. Damaged systems mend with travel time or with a repair order at a starbase. Time is measured in stardates, and the mission clock does not wait.
@@ -27,10 +27,10 @@ MADE FOR TOUCH
 • The library computer's galactic record is a tappable chart: touch a quadrant to plot a jump.
 • Enemy fire, hits, explosions, and warp jumps are shown on the grid with sound and haptics.
 • On iPad, the galactic record, long range scan, and legend stay on screen beside the grid.
-• Your game saves after every command. Pick it up exactly where you left off.
+• Your game saves after every move. Pick it up exactly where you left off.
 
 THE TERMINAL FEEL
-Green phosphor on black. The eight-line readout beside the sector grid. A scrolling log that narrates the mission the way the teletype did. The original three-letter commands: NAV, SRS, LRS, PHA, TOR, SHE, DAM, COM, and XXX.
+Green phosphor on black. The eight-line readout beside the sector grid. A scrolling log that narrates the mission the way the teletype did. The original three-letter orders: NAV, SRS, LRS, PHA, TOR, SHE, DAM, COM, and XXX.
 
 TWO KINDS OF INVADER
 Battle cruisers, marked +K+, are the classic enemy. Warbirds, marked +R+, carry weaker shields but hit harder. Every quadrant deals a mix.
@@ -50,7 +50,7 @@ retro,text,strategy,space,turn based,terminal,classic,1970s,basic,galaxy,warp,to
 Super Trek now runs natively on iPad. The full-size board keeps the galactic record, long range scan, and sensor legend on screen beside the sector grid, and the log runs at the full 57-column teletype width. Portrait and landscape are both supported.
 
 ## What's New (1.1)
-A bolder app icon, the classic PHA command for the beam weapon, and layout fixes for 4.7-inch iPhones.
+A bolder app icon, the classic PHA name for the beam weapon, and layout fixes for 4.7-inch iPhones.
 
 ## What's New (1.0)
 First release. The complete 1978 rule set, touch controls, sound and haptics, and save-anywhere play.
@@ -73,6 +73,7 @@ https://kkiserapps.com/app-support
 ## Review notes
 1.1 (2) was rejected 2026-09-28 under guideline 4.1(a) for metadata resembling "trek" and "Super Star Trek". The description no longer names the BASIC or UNIX titles, and the keywords no longer include "star" or "unix". Keep franchise titles out of all metadata fields.
 1.1 (2) was rejected again 2026-09-29 under 4.1(a) for resembling "Starship Command" (Acornsoft, 1983): never pair "starship" with "command" in metadata. Also avoid pairing "space" with "invaders" (Taito).
+1.1 (2) was rejected a third time 2026-09-30 for the same Starship Command finding; all "starship" and "command" wording removed from every field. Screenshots count as metadata: do not use the new game screen ("A 1978 STARSHIP SIMULATION").
 
 ## Still needed from you
 - Marketing URL (optional).
